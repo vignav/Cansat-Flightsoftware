@@ -1,2 +1,2 @@
 # Cansat-Flightsoftware
-Cansat Flightsoftware for teensy 4.1
+Cansat Flightsoftware for Teensy 4.1
