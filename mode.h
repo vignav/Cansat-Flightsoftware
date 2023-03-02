@@ -11,3 +11,8 @@ void idleMode()
 
     return ;
 }
+
+void simulationMode(){
+    
+    return ;
+}

@@ -2,7 +2,7 @@
 
 void isInAscent()
 {
-
+    // If altitude is increasing
     return ; 
 }
 
@@ -15,13 +15,13 @@ void isRocketSeparated()
 
 void isInDesceent()
 {
-
+    // If altitude is decreasing
     return ;
 }
 
 void isProbeDeployed()
 {
-
+    // 
     return ;
 }
 
