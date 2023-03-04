@@ -50,9 +50,24 @@ string CX(string *p)
     }
 }
 
-string ST(string *p)
-{
-    return ;
+string *ST(string *p)
+{   
+    string arr[3];
+    string a = p[3];
+    string colon = ":";
+    size_t pos = 0;
+    string data;
+    int i=0;
+    int dat;
+    while ((pos = a.find(colon)) != string::npos)
+    {
+        data = a.substr(0, pos);
+        arr[i] = data;
+        a.erase(0, pos + colon.length());
+        i++;
+    }  
+    arr[2] = a;
+    return arr ;
 }
 
 string SIM(string *p)
@@ -79,7 +94,7 @@ string SIMP(string *p)
 
 string CAL(string *p)
 {
-    return ;
+    return 0;
 }
 
 string CAM(string *p)
@@ -101,12 +116,12 @@ string CAM(string *p)
 
 string START(string *p)
 {
-    return ;
+    return "ON";
 }
 
 string IDLE(string *p)
 {
-    return ;
+    return "IDLE";
 }
 
 string MODE(string *p)
@@ -128,7 +143,7 @@ string MODE(string *p)
 
 string CAL_TILT(string *p)
 {
-    return ;
+    return "CALIBRATE TILT" ;
 }
 
 string packetCheck(string packet)
@@ -189,3 +204,4 @@ string packetCheck(string packet)
         cout<<"invalid";
     }
 }
+
