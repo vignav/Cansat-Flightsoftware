@@ -33,24 +33,24 @@ string *parsePacket( string packet )
     return arr;  
     //Parse the packet and slit it into all the nessasary ints and floats 
 }
-string CX(string *p)
+void CX(string *p)
 {
     if (p[3] == "ON")
     {
-        return "ON";
+        
     }
 
     if (p[3] == "OFF")
     {
-        return "OFF";
+        
     }
     else
     {
-        return "invalid";
+        
     }
 }
 
-string *ST(string *p)
+void *ST(string *p)
 {   
     string arr[3];
     string a = p[3];
@@ -67,83 +67,111 @@ string *ST(string *p)
         i++;
     }  
     arr[2] = a;
-    return arr ;
+    int hour = 0;
+    int minute = 0;
+    int second = 0;
+    string h = arr[0];
+    string m = arr[1];
+    string s = arr[2];
+    for(int i=0; i<h.length(); i++)
+    {
+        if(h[i]>47 && h[i]<58)
+        {
+            hour += h[i] - 48;
+        }
+    }
+
+    for(int i=0; i<m.length(); i++)
+    {
+        if(m[i]>47 && m[i]<58)
+        {
+            minute += m[i] - 48;
+        }
+    }
+
+    for(int i=0; i<s.length(); i++)
+    {
+        if(s[i]>47 && s[i]<58)
+        {
+            second += s[i] - 48;
+        }
+    }
 }
 
-string SIM(string *p)
+void SIM(string *p)
 {
     if (p[3] == "ENABLE")
     {
-        return "ENABLE";
+        
     }
 
     if (p[3] == "DISABLE")
     {
-        return "DISABLE";
+        
     }
     else
     {
-        return "invalid";
+        
     }
 }
 
-string SIMP(string *p)
+void SIMP(string *p)
 {
-    return p[3] ;
+    
 }
 
-string CAL(string *p)
+void CAL(string *p)
 {
-    return 0;
+    
 }
 
-string CAM(string *p)
+void CAM(string *p)
 {
     if (p[3] == "ON")
     {
-        return "ON";
+        
     }
 
     if (p[3] == "OFF")
     {
-        return "OFF";
+        
     }
     else
     {
-        return "invalid";
+        
     }
 }
 
-string START(string *p)
+void START(string *p)
 {
-    return "ON";
+    
 }
 
-string IDLE(string *p)
+void IDLE(string *p)
 {
-    return "IDLE";
+    
 }
 
-string MODE(string *p)
+void MODE(string *p)
 {
     if (p[3] == "F")
     {
-        return "F";
+        
     }
 
     if (p[3] == "S")
     {
-        return "S";
+        
     }
     else
     {
-        return "invalid";
+        
     }
 }
 
-string CAL_TILT(string *p)
+void CAL_TILT(string *p)
 {
-    return "CALIBRATE TILT" ;
+    
 }
 
 string packetCheck(string packet)
@@ -204,4 +232,3 @@ string packetCheck(string packet)
         cout<<"invalid";
     }
 }
-
