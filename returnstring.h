@@ -4,6 +4,9 @@
 #include <sstream>
 using namespace std;
 
+
+
+
 string printFloat(double str, int len,bool valid)
 {
   string s="";
@@ -77,19 +80,25 @@ string printDate(int day, int month, int year, bool valid)
     string date="";
     if (valid)
     {
-        stringstream sday;
-        sday<<setw(2)<<setfill('0') << day;
-        string sDay = sday.str();
-        
-        stringstream smonth;
-        smonth<<setw(2)<<setfill('0') << month;
-        string sMonth = smonth.str();
-        
-        stringstream syear;
-        syear<<setw(4)<<setfill('0') << year;
-        string sYear = syear.str();
-        
-        date = date + sDay + ":" + sMonth + ":" + sYear;
+        string d = to_string(day);
+        string m = to_string(month);
+        string yr = to_string(year);
+
+         if(day/10 == 0)
+        {
+          d = "0" + d;
+        }
+
+        if (month/10==0)
+        {
+          m = "0" + m;
+        }
+        if (year/10==0)
+        {
+          yr = "0" + yr;
+        }
+
+        date = yr + ":" + m + ":" + d;
     }
     else
     {
@@ -103,19 +112,26 @@ string printTime(int hour, int minute, int second, bool valid)
     string tim="";
     if (valid)
     {
-        stringstream shour;
-        shour<<setw(2)<<setfill('0') << hour;
-        string sHour = shour.str();
+        string hr = to_string(hour);
+        string min = to_string(minute);
+        string sec = to_string(second);
+        if(hour/10 == 0)
+        {
+          hr = "0" + hr;
+        }
+
+        if (minute/10==0)
+        {
+          min = "0" + min;
+        }
+        if (second/10==0)
+        {
+          sec = "0" + sec;
+        }
         
-        stringstream sminute;
-        sminute<<setw(2)<<setfill('0') << minute;
-        string sMinute = sminute.str();
         
-        stringstream ssecond;
-        ssecond<<setw(2)<<setfill('0') << second;
-        string sSecond = ssecond.str();
-        
-        tim = tim + sHour + ":" + sMinute + ":" + sSecond;
+
+        tim = hr + ":" + min + ":" +sec;
     }
     else
     {
