@@ -1,6 +1,12 @@
-#include<iostream>
 #include<string.h>
 using namespace std;
+
+string makeTelemetryPacket( /* inputs required to do it  */ ){
+    string packet = "";
+    // using returnString function and the inputs make strings and combine them with commas and make the packet 
+    // has to be implimented 
+    return packet;
+}
 
 void sendDataTelemetry(string telemetry)
 {
