@@ -9,29 +9,30 @@ void gpsSetup(){
   gpsSerial.begin(GPSBaud);
 }
 
-bool gpsSatsValid(){
- return (gps.satellites.isValid());
+void gpsGetValues ( int *sats , bool *satsValid , float *lat , float *lng , bool *locValid , float *alt , bool *altValid ){
+  *sats = gps.satellites.value();
+  *satsValid = gps.satellites.isValid();
+  
+  *lat = gps.location.lat();
+  *lng = gps.location.lng();
+  *locValid = gps.location.isValid();
+  
+  *altValid = gps.altitude.isValid();
+  *alt = gps.altitude.meters();
 }
 
-float gpsAlt(){
-  return ( gps.altitude.meters() );
-}
-/*
-void gpsReading(){
-  printInt(gps.satellites.value(), , 5);
-  printFloat(gps.location.lat(), gps.location.isValid(), 11, 6);
-  printFloat(gps.location.lng(), gps.location.isValid(), 12, 6);
-  gps.date; gps.time;
-  gps.altitude.isValid();
+void gpsGetTime( int *hour , int *min , int *seconds , bool *timeValid , bool *dateValid , int *month , int *date , int *year ){
+  *timeValid = gps.time.isValid();
+  *dateValid = gps.date.isValid();
+  
+  *month = gps.date.month(); 
+  *date = gps.date.day(); 
+  *year = gps.date.year();
+  *hour = gps.time.hour(); 
+  *min = gps.time.minute(); 
+  *seconds = gps.time.second();
 }
 
-void gpsTime(){
-  gps.date.isValid();
-  gps.time.isValid();
-  gps.date.month(); gps.date.day(); gps.date.year();
-  gps.time.hour(); gps.time.minute(); gps.time.second();
-}
-*/
 // This custom version of delay() ensures that the gps object
 // is being "fed".
 static void smartDelay(unsigned long ms)
