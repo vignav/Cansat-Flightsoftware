@@ -1,10 +1,46 @@
 #include<string.h>
-using namespace std;
+//using namespace std;
 
-string makeTelemetryPacket( /* inputs required to do it  */ ){
-    string packet = "";
-    // using returnString function and the inputs make strings and combine them with commas and make the packet 
-    // has to be implimented 
+// string makeTelemetryPacket( /* inputs required to do it  */ ){
+//     string packet = "";
+//     // using returnString function and the inputs make strings and combine them with commas and make the packet 
+//     // has to be implimented 
+//     return packet;
+// }
+
+//TEAM_ID, MISSION_TIME, PACKET_COUNT, MODE, STATE, ALTITUDE,
+//11
+//HS_DEPLOYED, PC_DEPLOYED, MAST_RAISED, TEMPERATURE, VOLTAGE,
+//PRESSURE, GPS_TIME, GPS_ALTITUDE, GPS_LATITUDE, GPS_LONGITUDE,
+//GPS_SATS, TILT_X, TILT_Y, CMD_ECHO [,,OPTIONAL_DATA]
+#include "returnstring.h"
+
+#define TEAM_ID 1020
+#define packetLength 6
+#define altitudeLen 5
+#define tempLen 5
+#define pressLen 5
+#define altiLen 7
+#define latiLen 7
+#define longiLen 7
+#define satLen 2
+#define tiltLen 6
+
+String makeTelemetryPacket(String MISSION_TIME, int packet_count, String MODE, String STATE, float alt, String HS_DEPLOYED, String PC_DEPLOYED, String MAST_RAISED, float temp, float pressure, String VOLTAGE, String GPS_TIME, float gps_altitude, float gps_latitude, float gps_longitude, int gps_sats, float tilt_x, float tilt_y, String CMD_ECHO)
+{
+    String PACKET_COUNT = printInt(packet_count, packetLength, true);
+    String ALTITUDE = printFloat(alt, altitudeLen, 1, true);
+    String TEMPERATURE = printFloat(temp, tempLen, 1,true);
+    String PRESSURE = printFloat(pressure, pressLen, 1, true);
+    String GPS_ALTITUDE = printFloat(gps_altitude, altiLen, 1, true);
+    String GPS_LATITUDE = printFloat(gps_latitude, latiLen, 4, true);
+    String GPS_LONGITUDE = printFloat(gps_longitude, longiLen, 4, true);
+    String GPS_SATS = printInt(gps_sats, satLen, true);
+    String TILT_X = printFloat(tilt_x, tiltLen, 2, true);
+    String TILT_Y = printFloat(tilt_y, tiltLen, 2, true);
+    
+    String packet = "";
+    packet = TEAM_ID + "," + MISSION_TIME + "," + PACKET_COUNT + "," + MODE + "," + STATE + "," + ALTITUDE + "," + HS_DEPLOYED + "," + PC_DEPLOYED + "," + MAST_RAISED + "," + TEMPERATURE + "," + PRESSURE + "," + VOLTAGE + "," + GPS_TIME + "," + GPS_ALTITUDE + "," + GPS_LATITUDE + "," + GPS_LONGITUDE + "," + GPS_SATS + "," + TILT_X + "," + TILT_Y + "," + CMD_ECHO;
     return packet;
 }
 
