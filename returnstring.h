@@ -32,7 +32,7 @@ using namespace std;
 //   return stri;
 // }
 
-string addZeroSuffix(string st, int n)
+String addZeroSuffix(String st, int n)
 {
   for(int i=1;i<=n;i++)
     st = st + "0";
@@ -40,7 +40,7 @@ string addZeroSuffix(string st, int n)
   return st;
 }
 
-string addZeroToPrefix(string st, int n)
+String addZeroToPrefix(String st, int n)
 {
   for(int i=1;i<=n;i++)
     st = "0" + st;
@@ -48,16 +48,16 @@ string addZeroToPrefix(string st, int n)
   return st;
 }
 
-string printFloat(double str, int len, int lenAfterDecimal, bool valid)
+String printFloat(double str, int len, int lenAfterDecimal, bool valid)
 {
-  string finalStri;
+  String finalStri;
   if (valid)
   {
-    string s = to_string(str);
-    size_t indexOfPt = s.find(".");
+    String s = String(str);
+    size_t indexOfPt = s.indexOf(".");
 
     if((len)-(indexOfPt+1) >= lenAfterDecimal)
-      finalStri = s.substr(0, (indexOfPt+1+lenAfterDecimal));
+      finalStri = s.substring(0, (indexOfPt+1+lenAfterDecimal));
     else
     {
       int zeroToSuffix = lenAfterDecimal - (len - (indexOfPt+1));
@@ -103,12 +103,12 @@ string printFloat(double str, int len, int lenAfterDecimal, bool valid)
 //   return(str);
 // }
  
- string printInt(unsigned long val, int len, bool valid)
+ String printInt(unsigned long val, int len, bool valid)
 {
-  string finalStr="";
+  String finalStr="";
   if (valid)
   {
-    string st = to_string(val);
+    String st = String(val);
     size_t zeroAtPrefix = len - (st.length());
     finalStr = addZeroToPrefix(st, zeroAtPrefix);
     return finalStr;
@@ -146,14 +146,14 @@ string printStr(const char *str, int len, bool valid)
 
 }
 
-string printDate(int day, int month, int year, bool valid)
+String printDate(int day, int month, int year, bool valid)
 {
-    string date="";
+    String date="";
     if (valid)
     {
-        string d = to_string(day);
-        string m = to_string(month);
-        string yr = to_string(year);
+        String d = String(day);
+        String m = String(month);
+        String yr = String(year);
 
          if(day/10 == 0)
         {
@@ -178,14 +178,14 @@ string printDate(int day, int month, int year, bool valid)
     return date;
 }
 
-string printTime(int hour, int minute, int second, bool valid)
+String printTime(int hour, int minute, int second, bool valid)
 {
-    string tim="";
+    String tim="";
     if (valid)
     {
-        string hr = to_string(hour);
-        string min = to_string(minute);
-        string sec = to_string(second);
+        String hr = String(hour);
+        String min = String(minute);
+        String sec = String(second);
         if(hour/10 == 0)
         {
           hr = "0" + hr;
