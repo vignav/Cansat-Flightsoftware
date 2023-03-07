@@ -1,36 +1,3 @@
-//#include <iostream>
-//#include <String.h>
-//#include <iomanip>
-//#include <sstream>
-//using namespace std;
-
-
-
-// string printFloat(double str, int len,bool valid)
-// {
-//   string s="";
-//   string stri="";
-  
-//   if (valid)
-//   {
-//     string dot = ".";
-//     stringstream s;
-//     s<<str;
-//     stri = s.str();
-//     size_t a = stri.find(dot);
-    
-//     for (int i=a-1; i<len; ++i)
-//       stri+=("'");
-//   }
-//   else
-//   {
-    
-//     for (int i=0; i<len; i++)
-//       stri+="*";
-//   }
-//   return stri;
-// }
-
 String addZeroSuffix(String st, int n)
 {
   for(int i=1;i<=n;i++)
@@ -84,24 +51,6 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
   return finalStri;
 }
 
-// string printInt(unsigned long val, int len, bool valid)
-// {
-//   string str="";
-//   if (valid)
-//   {
-//     str = to_string(val);
-//     for (int i=str.size(); i<len; ++i)
-//       str+=(' ');
-//   }
-
-//   else
-//   {
-//     for (int i=0; i<len; i++)
-//       str+="*";
-//   }
-//   return(str);
-// }
- 
  String printInt(unsigned long val, int len, bool valid)
 {
   String finalStr="";
@@ -198,8 +147,6 @@ String printTime(int hour, int minute, int second, bool valid)
         {
           sec = "0" + sec;
         }
-        
-        
 
         tim = hr + ":" + min + ":" +sec;
     }
