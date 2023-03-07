@@ -1,10 +1,19 @@
-#include <iostream>
-#include <string.h>
-#include <iomanip>
+//#include <iostream>
+//#include <String.h>
+//#include <iomanip>
 //#include <sstream>
-using namespace std;
+//using namespace std;
 
+void setup()
+{
+  Serial.begin(9600);
+}
 
+void loop()
+{
+  Serial.println(printFloat(12.45, 8, 4, true));
+  delay(1000);
+}
 
 
 // string printFloat(double str, int len,bool valid)
@@ -124,10 +133,10 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
 
 
 
-string printStr(const char *str, int len, bool valid)
+String printStr(const char *str, int len, bool valid)
 {
 
-    string stri="";
+    String stri="";
     if (valid)
     {
       int slen = strlen(str);
