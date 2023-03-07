@@ -4,16 +4,6 @@
 //#include <sstream>
 //using namespace std;
 
-void setup()
-{
-  Serial.begin(9600);
-}
-
-void loop()
-{
-  Serial.println(printFloat(12.45, 8, 4, true));
-  delay(1000);
-}
 
 
 // string printFloat(double str, int len,bool valid)
