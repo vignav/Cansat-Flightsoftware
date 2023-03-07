@@ -2,18 +2,22 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
+#include "../smartDelay.h"
 
+Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
+sensors_event_t event;
 
-Adafruit_BNO055 bno = Adafruit_BNO055();
+void bnoSetup(){
+  bno.begin();
+  bno.setExtCrystalUse(true);
+}
 
-float SEALEVELPRESSURE_HPA = 1013.25;
-float BMPtemprature,BMPpressure,BMPaltitude;
+bool bnoCheck(){
+  uint8_t sys, gyro, accel, mag = 0;
+  bno.getCalibration(&sys, &gyro, &accel, &mag);
+  return (sys!=0);
+}
 
-//BNO code 
-
-//return 0 if calibrated 
-//returns accel calibration if not calibrated
-//Run in loop until output turns 0
 int bnoCalibration()
 {
   uint8_t system, gyro, accel, mg = 0;
@@ -23,29 +27,26 @@ int bnoCalibration()
   return (int) (accel+1);
 }
 
-float bnoYAngle()
-{
-  sensors_event_t event;
+void bnoReading(){
   bno.getEvent(&event);
-  return (float)event.orientation.y;
 }
 
-float bnoXAngle()
-{
-  sensors_event_t event;
-  bno.getEvent(&event);
-  return (float)event.orientation.x;
-}
-
-float bnoZAngle()
-{
-  sensors_event_t event;
-  bno.getEvent(&event);
-  return (float)event.orientation.z;
-}
-
-float bnoAcc()
-{
+void bnoGetValues( float *x ,float *y , float*z ,float *acce ,bool *valid ){
+  float tx = (float)event.orientation.x;
+  float ty = (float)event.orientation.y;
+  float tz = (float)event.orientation.z;
+  
   imu::Vector<3> acc = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-  return (sqrt(acc.x() * acc.x() + acc.y() * acc.y() + acc.z() * acc.z()));
+  *valid = true;
+  if ( ty == 0.00 && tx == 0.00 && tz == 0.00 ){
+    if ( bnoCheck() == 0 ){
+        *valid = false;
+        bno.begin();
+        smartDelay(100);
+    }
+  }
+  *acce = sqrt(acc.x() * acc.x() + acc.y() * acc.y() + acc.z() * acc.z());
+  *x = tx;
+  *y = ty;
+  *z = tz;
 }
