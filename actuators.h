@@ -13,12 +13,20 @@
 #define flagRaiseAngle 120
 #define flagDownAngle 60
 
-
+Servo probeServo;
+Servo paraServo;
+Servo flagServo;
+void setup()
+{
+     
+    probeServo.attach(probePin);
+    paraServo.attach(parachutePin);
+    flagServo.attach(flagPin);
+}
 void deployProbe()
 {
     // Turn servo to deploy probe
-    Servo probeServo;
-    probeServo.attach(probePin);
+   
     probeServo.write(probeDeployAngle);
     return ;
 }
@@ -26,8 +34,7 @@ void deployProbe()
 void lockProbe()
 {
     // Turn servo to lock probe
-    Servo probeServo;
-    probeServo.attach(probePin);
+    
     probeServo.write(probeLockAngle);
     return ;
 }
@@ -47,8 +54,7 @@ void stopDeployingHeatSheild()
 void deployPrachute()
 {
     // Turn servo to deploy prachute
-    Servo paraServo;
-    paraServo.attach(parachutePin);
+   
     paraServo.write(parachuteDeployAngle);
     return ;
 }
@@ -56,8 +62,7 @@ void deployPrachute()
 void lockPrachute()
 {
     // Turn servo to lock prachute
-    Servo paraServo;
-    paraServo.attach(parachutePin);
+   
     paraServo.write(parachuteLockAngle);
     return ;
 }
@@ -65,8 +70,7 @@ void lockPrachute()
 void raiseFlag()
 {
     // Turn servo to raise flag
-    Servo flagServo;
-    flagServo.attach(flagPin);
+   
     flagServo.write(flagRaiseAngle);
     return;
 }
@@ -74,8 +78,7 @@ void raiseFlag()
 void lowerFlag()
 {
     // Turn servo lower the flag
-    Servo flagServo;
-    flagServo.attach(flagPin);
+   
     flagServo.write(flagDownAngle);
     return;
 }
