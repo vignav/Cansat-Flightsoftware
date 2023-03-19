@@ -16,7 +16,7 @@
 Servo probeServo;
 Servo paraServo;
 Servo flagServo;
-void setup()
+void actuatorSetup()
 {
      
     probeServo.attach(probePin);
