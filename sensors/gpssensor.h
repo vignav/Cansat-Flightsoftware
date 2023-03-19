@@ -1,18 +1,16 @@
 #include <TinyGPSPlus.h>
-#include "returnstring.h"
 
 TinyGPSPlus gps;
-#define gpsSerial Serial1
+#define gpsSerial Serial5
 #define gpsBaud 9600
 
 void gpsSetup(){
-  gpsSerial.begin(GPSBaud);
+  gpsSerial.begin(gpsBaud);
 }
-}
-void gpsReading( float *sats , float *lat , float *lat , float *alt , bool *satsValid , bool *locValid , bool *altValid ){
+void gpsReading( float *sats , float *lat , float *lng , float *alt , bool *satsValid , bool *locValid , bool *altValid ){
   *sats =  gps.satellites.value();
   *lat =  gps.location.lat();
-  *lat =  gps.location.lng();
+  *lng =  gps.location.lng();
   *alt =  gps.altitude.meters();
   *satsValid =  gps.satellites.isValid();
   *locValid =  gps.location.isValid();
@@ -20,7 +18,7 @@ void gpsReading( float *sats , float *lat , float *lat , float *alt , bool *sats
 }
 
 void gpsGetTime( int *second , int *minute , int *hour , int *day ,int *month , int *year , bool *timeValid ,bool *dateValid  ){
-  second = gps.time.second();
+  *second = gps.time.second();
   *minute = gps.time.minute(); 
   *hour = gps.time.hour(); 
   *day = gps.date.day();
