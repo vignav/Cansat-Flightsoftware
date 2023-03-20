@@ -49,7 +49,7 @@ void stopDeployingHeatSheild()
     return ;
 }
 
-void deployPrachute()
+void deployParachute()
 {
     // Turn servo to deploy prachute
    
