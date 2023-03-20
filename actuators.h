@@ -1,5 +1,4 @@
 #include <Servo.h>
-//#include<iostream>
 
 #define probePin 1
 #define probeDeployAngle 120
@@ -18,7 +17,6 @@ Servo paraServo;
 Servo flagServo;
 void actuatorSetup()
 {
-     
     probeServo.attach(probePin);
     paraServo.attach(parachutePin);
     flagServo.attach(flagPin);
