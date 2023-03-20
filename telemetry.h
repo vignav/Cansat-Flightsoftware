@@ -1,4 +1,4 @@
-#include<string.h>
+#include <string>
 //using namespace std;
 
 // string makeTelemetryPacket( /* inputs required to do it  */ ){
@@ -44,27 +44,27 @@ String makeTelemetryPacket(String MISSION_TIME, int packet_count, String MODE, S
     return packet;
 }
 
-void sendDataTelemetry(string telemetry)
+void sendDataTelemetry(String telemetry)
 {
 
     return ;
 }
 
-string recieveDataTelemetry()
+String recieveDataTelemetry()
 {
     // Recieve one packet
     return ;
 }
 
-string *parsePacket( string packet )
-{
+String *parsePacket( String packet );
+/*{
     int len = strlen("packet");
-    string comma = ",";
+    String comma = ",";
     size_t pos = 0;
-    string data;
-    string arr[4];
+    String data;
+    String arr[4];
     int i = 0;
-    while ((pos = packet.find(comma)) != string::npos)
+    while ((pos = packet.indexOf(comma)) != packet.length())
     {
         data = packet.substr(0, pos);
         arr[i] = data;
@@ -74,8 +74,8 @@ string *parsePacket( string packet )
     arr[3] = packet;
     return arr;  
     //Parse the packet and slit it into all the nessasary ints and floats 
-}
-void CX(string *p)
+}*/
+void CX(String *p)
 {
     if (p[3] == "ON")
     {
@@ -92,16 +92,16 @@ void CX(string *p)
     }
 }
 
-void *ST(string *p)
-{   
-    string arr[3];
-    string a = p[3];
-    string colon = ":";
+void *ST(String *p);
+/*{   
+    String arr[3];
+    String a = p[3];
+    String colon = ":";
     size_t pos = 0;
-    string data;
+    String data;
     int i=0;
     int dat;
-    while ((pos = a.find(colon)) != string::npos)
+    while ((pos = a.indexOf(colon)) != a.length())
     {
         data = a.substr(0, pos);
         arr[i] = data;
@@ -112,9 +112,9 @@ void *ST(string *p)
     int hour = 0;
     int minute = 0;
     int second = 0;
-    string h = arr[0];
-    string m = arr[1];
-    string s = arr[2];
+    String h = arr[0];
+    String m = arr[1];
+    String s = arr[2];
     for(int i=0; i<h.length(); i++)
     {
         if(h[i]>47 && h[i]<58)
@@ -139,8 +139,8 @@ void *ST(string *p)
         }
     }
 }
-
-void SIM(string *p)
+*/
+void SIM(String *p)
 {
     if (p[3] == "ENABLE")
     {
@@ -157,17 +157,17 @@ void SIM(string *p)
     }
 }
 
-void SIMP(string *p)
+void SIMP(String *p)
 {
     
 }
 
-void CAL(string *p)
+void CAL(String *p)
 {
     
 }
 
-void CAM(string *p)
+void CAM(String *p)
 {
     if (p[3] == "ON")
     {
@@ -184,17 +184,17 @@ void CAM(string *p)
     }
 }
 
-void START(string *p)
+void START(String *p)
 {
     
 }
 
-void IDLE(string *p)
+void idleComReceived(String *p)
 {
     
 }
 
-void MODE(string *p)
+void MODE(String *p)
 {
     if (p[3] == "F")
     {
@@ -211,14 +211,14 @@ void MODE(string *p)
     }
 }
 
-void CAL_TILT(string *p)
+void CAL_TILT(String *p)
 {
     
 }
 
-string packetCheck(string packet)
+String packetCheck(String packet)
 {
-    string *p = parsePacket(packet);
+    String *p = parsePacket(packet);
     if (p[2] == "CX")
     {
         CX(p);
@@ -254,9 +254,9 @@ string packetCheck(string packet)
         START(p);
     }
 
-    if (p[2] == "IDLE")
+    if (p[2] == "idleComReceived")
     {
-        IDLE(p);
+        idleComReceived(p);
     }
 
     if (p[2] == "MODE")
@@ -271,6 +271,6 @@ string packetCheck(string packet)
 
     else
     {
-        cout<<"invalid";
+        // Fake command recieved just write that in SD card
     }
 }
