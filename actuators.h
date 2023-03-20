@@ -1,5 +1,4 @@
 #include <Servo.h>
-//#include<iostream>
 
 #define probePin 1
 #define probeDeployAngle 120
@@ -16,9 +15,8 @@
 Servo probeServo;
 Servo paraServo;
 Servo flagServo;
-void setup()
+void servoSetup()
 {
-     
     probeServo.attach(probePin);
     paraServo.attach(parachutePin);
     flagServo.attach(flagPin);
