@@ -5,7 +5,7 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 Adafruit_BMP3XX bmp;
 
-int bmpSetup(){
+int BMPSetup(){
   if (!bmp.begin_I2C()) {   // hardware I2C mode, can pass in address & alt Wire
     //Failed to connect
     return(1);
@@ -24,7 +24,7 @@ void bmpGetValues(float *temp, float *alt ,float *pressure , bool *valid){
   if (! bmp.performReading()) {
     //Failed to read DATA
     *valid=false;
-    BMPsetup();
+    BMPSetup();
   }
   else{
     *temp = bmp.temperature;
