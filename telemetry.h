@@ -1,21 +1,14 @@
-#include<string.h>
-//using namespace std;
-
-// string makeTelemetryPacket( /* inputs required to do it  */ ){
-//     string packet = "";
-//     // using returnString function and the inputs make strings and combine them with commas and make the packet 
-//     // has to be implimented 
-//     return packet;
-// }
+#include <string>
+#include "RTCtime.h"
+#include "returnstring.h"
 
 //TEAM_ID, MISSION_TIME, PACKET_COUNT, MODE, STATE, ALTITUDE,
 //11
 //HS_DEPLOYED, PC_DEPLOYED, MAST_RAISED, TEMPERATURE, VOLTAGE,
 //PRESSURE, GPS_TIME, GPS_ALTITUDE, GPS_LATITUDE, GPS_LONGITUDE,
 //GPS_SATS, TILT_X, TILT_Y, CMD_ECHO [,,OPTIONAL_DATA]
-#include "returnstring.h"
 
-#define TEAM_ID 1020
+#define TEAM_ID 1062
 #define packetLength 6
 #define altitudeLen 5
 #define tempLen 5
@@ -44,38 +37,28 @@ String makeTelemetryPacket(String MISSION_TIME, int packet_count, String MODE, S
     return packet;
 }
 
-void sendDataTelemetry(string telemetry)
+void sendDataTelemetry(String telemetry)
 {
 
     return ;
 }
 
-string recieveDataTelemetry()
+String recieveDataTelemetry()
 {
     // Recieve one packet
     return ;
 }
-
-string *parsePacket( string packet )
+void parsePacket( String packet , String *arr , int n , char a = ',')
 {
-    int len = strlen("packet");
-    string comma = ",";
-    size_t pos = 0;
-    string data;
-    string arr[4];
-    int i = 0;
-    while ((pos = packet.find(comma)) != string::npos)
+    int pos = 0;
+    for (int i = 0 ; (pos = packet.indexOf(',')) != packet.length() && i < n-1 ; i++ )
     {
-        data = packet.substr(0, pos);
-        arr[i] = data;
-        packet.erase(0, pos + comma.length());
-        i++;
+        arr[i] = packet.substring(0, pos);
+        packet = packet.substring(pos + 1);
     }   
-    arr[3] = packet;
-    return arr;  
-    //Parse the packet and slit it into all the nessasary ints and floats 
+    arr[n-1] = packet;
 }
-void CX(string *p)
+void CX(String *p)
 {
     if (p[3] == "ON")
     {
@@ -92,55 +75,24 @@ void CX(string *p)
     }
 }
 
-void *ST(string *p)
+void ST(String p[])
 {   
-    string arr[3];
-    string a = p[3];
-    string colon = ":";
-    size_t pos = 0;
-    string data;
-    int i=0;
-    int dat;
-    while ((pos = a.find(colon)) != string::npos)
-    {
-        data = a.substr(0, pos);
-        arr[i] = data;
-        a.erase(0, pos + colon.length());
-        i++;
-    }  
-    arr[2] = a;
-    int hour = 0;
-    int minute = 0;
-    int second = 0;
-    string h = arr[0];
-    string m = arr[1];
-    string s = arr[2];
-    for(int i=0; i<h.length(); i++)
-    {
-        if(h[i]>47 && h[i]<58)
-        {
-            hour += h[i] - 48;
-        }
+    if ( p[3] == "GPS" ){
+        //set time using gps
+        setTimeGps();
     }
-
-    for(int i=0; i<m.length(); i++)
-    {
-        if(m[i]>47 && m[i]<58)
-        {
-            minute += m[i] - 48;
-        }
-    }
-
-    for(int i=0; i<s.length(); i++)
-    {
-        if(s[i]>47 && s[i]<58)
-        {
-            second += s[i] - 48;
-        }
+    else{
+        String arr[3];
+        parsePacket(p[3],arr,3,':');
+        int hr = arr[0].toInt();
+        int min = arr[1].toInt();
+        int sec = arr[2].toInt();
+        //set RTCtime 
+        setTime_td(hr,min,sec);
     }
 }
 
-void SIM(string *p)
+void SIM(String *p)
 {
     if (p[3] == "ENABLE")
     {
@@ -157,17 +109,17 @@ void SIM(string *p)
     }
 }
 
-void SIMP(string *p)
+void SIMP(String *p)
 {
     
 }
 
-void CAL(string *p)
+void CAL(String *p)
 {
     
 }
 
-void CAM(string *p)
+void CAM(String *p)
 {
     if (p[3] == "ON")
     {
@@ -184,17 +136,17 @@ void CAM(string *p)
     }
 }
 
-void START(string *p)
+void START(String *p)
 {
     
 }
 
-void IDLE(string *p)
+void idleComReceived(String *p)
 {
     
 }
 
-void MODE(string *p)
+void MODE(String *p)
 {
     if (p[3] == "F")
     {
@@ -211,14 +163,17 @@ void MODE(string *p)
     }
 }
 
-void CAL_TILT(string *p)
+void CAL_TILT(String *p)
 {
     
 }
 
-string packetCheck(string packet)
+String packetCheck(String packet)
 {
-    string *p = parsePacket(packet);
+    int no_of_packets = 4;
+    String p[no_of_packets];
+    parsePacket(packet,p,no_of_packets);
+
     if (p[2] == "CX")
     {
         CX(p);
@@ -256,7 +211,7 @@ string packetCheck(string packet)
 
     if (p[2] == "IDLE")
     {
-        IDLE(p);
+        idleComReceived(p);
     }
 
     if (p[2] == "MODE")
@@ -271,6 +226,6 @@ string packetCheck(string packet)
 
     else
     {
-        cout<<"invalid";
+        // Fake command recieved just write that in SD card
     }
 }

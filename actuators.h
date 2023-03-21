@@ -15,7 +15,7 @@
 Servo probeServo;
 Servo paraServo;
 Servo flagServo;
-void servoSetup()
+void actuatorSetup()
 {
     probeServo.attach(probePin);
     paraServo.attach(parachutePin);
@@ -49,7 +49,7 @@ void stopDeployingHeatSheild()
     return ;
 }
 
-void deployPrachute()
+void deployParachute()
 {
     // Turn servo to deploy prachute
    
