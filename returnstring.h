@@ -20,7 +20,7 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
   if (valid)
   {
     String s = String(str);
-    size_t indexOfPt = s.indexOf(".");
+    int indexOfPt = s.indexOf(".");
 
     if((len)-(indexOfPt+1) >= lenAfterDecimal)
       finalStri = s.substring(0, (indexOfPt+1+lenAfterDecimal));
@@ -30,7 +30,7 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
       finalStri = addZeroSuffix(s, zeroToSuffix);
     }
 
-      size_t lenBeforeDecimal = len - (lenAfterDecimal + 1);
+      int lenBeforeDecimal = len - (lenAfterDecimal + 1);
 
       if(lenBeforeDecimal >= indexOfPt)
       {
@@ -57,7 +57,7 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
   if (valid)
   {
     String st = String(val);
-    size_t zeroAtPrefix = len - (st.length());
+    int zeroAtPrefix = len - (st.length());
     finalStr = addZeroToPrefix(st, zeroAtPrefix);
     return finalStr;
   }
