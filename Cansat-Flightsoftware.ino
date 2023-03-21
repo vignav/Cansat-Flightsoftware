@@ -73,7 +73,7 @@ void loop() {
     case PARACHUTE_DEPLOYED:
       //deploy parachute function
       deployParachute();
-      //If there is no movement then move to landed state
+       //If there is no movement then move to landed state
       break;
     case LANDED:
       // Open flag and just wait do nothing

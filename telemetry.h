@@ -1,21 +1,14 @@
 #include <string>
-//using namespace std;
-
-// string makeTelemetryPacket( /* inputs required to do it  */ ){
-//     string packet = "";
-//     // using returnString function and the inputs make strings and combine them with commas and make the packet 
-//     // has to be implimented 
-//     return packet;
-// }
+#include "RTCtime.h"
+#include "returnstring.h"
 
 //TEAM_ID, MISSION_TIME, PACKET_COUNT, MODE, STATE, ALTITUDE,
 //11
 //HS_DEPLOYED, PC_DEPLOYED, MAST_RAISED, TEMPERATURE, VOLTAGE,
 //PRESSURE, GPS_TIME, GPS_ALTITUDE, GPS_LATITUDE, GPS_LONGITUDE,
 //GPS_SATS, TILT_X, TILT_Y, CMD_ECHO [,,OPTIONAL_DATA]
-#include "returnstring.h"
 
-#define TEAM_ID 1020
+#define TEAM_ID 1062
 #define packetLength 6
 #define altitudeLen 5
 #define tempLen 5
@@ -55,26 +48,16 @@ String recieveDataTelemetry()
     // Recieve one packet
     return ;
 }
-
-String *parsePacket( String packet );
-/*{
-    int len = strlen("packet");
-    String comma = ",";
-    size_t pos = 0;
-    String data;
-    String arr[4];
-    int i = 0;
-    while ((pos = packet.indexOf(comma)) != packet.length())
+void parsePacket( String packet , String *arr , int n , char a = ',')
+{
+    int pos = 0;
+    for (int i = 0 ; (pos = packet.indexOf(',')) != packet.length() && i < n-1 ; i++ )
     {
-        data = packet.substr(0, pos);
-        arr[i] = data;
-        packet.erase(0, pos + comma.length());
-        i++;
+        arr[i] = packet.substring(0, pos);
+        packet = packet.substring(pos + 1);
     }   
-    arr[3] = packet;
-    return arr;  
-    //Parse the packet and slit it into all the nessasary ints and floats 
-}*/
+    arr[n-1] = packet;
+}
 void CX(String *p)
 {
     if (p[3] == "ON")
@@ -92,54 +75,23 @@ void CX(String *p)
     }
 }
 
-void *ST(String *p);
-/*{   
-    String arr[3];
-    String a = p[3];
-    String colon = ":";
-    size_t pos = 0;
-    String data;
-    int i=0;
-    int dat;
-    while ((pos = a.indexOf(colon)) != a.length())
-    {
-        data = a.substr(0, pos);
-        arr[i] = data;
-        a.erase(0, pos + colon.length());
-        i++;
-    }  
-    arr[2] = a;
-    int hour = 0;
-    int minute = 0;
-    int second = 0;
-    String h = arr[0];
-    String m = arr[1];
-    String s = arr[2];
-    for(int i=0; i<h.length(); i++)
-    {
-        if(h[i]>47 && h[i]<58)
-        {
-            hour += h[i] - 48;
-        }
+void ST(String p[])
+{   
+    if ( p[3] == "GPS" ){
+        //set time using gps
+        setTimeGps();
     }
-
-    for(int i=0; i<m.length(); i++)
-    {
-        if(m[i]>47 && m[i]<58)
-        {
-            minute += m[i] - 48;
-        }
-    }
-
-    for(int i=0; i<s.length(); i++)
-    {
-        if(s[i]>47 && s[i]<58)
-        {
-            second += s[i] - 48;
-        }
+    else{
+        String arr[3];
+        parsePacket(p[3],arr,3,':');
+        int hr = arr[0].toInt();
+        int min = arr[1].toInt();
+        int sec = arr[2].toInt();
+        //set RTCtime 
+        setTime_td(hr,min,sec);
     }
 }
-*/
+
 void SIM(String *p)
 {
     if (p[3] == "ENABLE")
@@ -218,7 +170,10 @@ void CAL_TILT(String *p)
 
 String packetCheck(String packet)
 {
-    String *p = parsePacket(packet);
+    int no_of_packets = 4;
+    String p[no_of_packets];
+    parsePacket(packet,p,no_of_packets);
+
     if (p[2] == "CX")
     {
         CX(p);
@@ -254,7 +209,7 @@ String packetCheck(String packet)
         START(p);
     }
 
-    if (p[2] == "idleComReceived")
+    if (p[2] == "IDLE")
     {
         idleComReceived(p);
     }
