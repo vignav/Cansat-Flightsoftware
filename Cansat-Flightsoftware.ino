@@ -4,6 +4,7 @@
 #include "./sensors/bnosensor.h"
 #include "./sensors/bmpsensor.h"
 #include "./sensors/gpssensor.h"
+#include "xbeeComms.h"
 
 enum states {
   IDLE ,
@@ -22,6 +23,10 @@ enum modes {
 int currentState = IDLE ;
 int currentMode = FLIGHT ;
 int packet_count=0;
+bool HS_deployed = false;
+bool PC_deployed = false;
+bool MAST_raise = false;
+
 float zero_alt_calib;
 bool telemetry = true;
 
@@ -45,6 +50,9 @@ void setup(){
   currentMode = EEreadInt(2);
   packet_count = EEreadInt(3);
   zero_alt_calib = EEreadFloat(4);
+  HS_deployed = EEreadInt(5);
+  PC_deployed = EEreadInt(6);
+  MAST_raise = EEreadInt(7);
 
   bnoSetup();
   bmpSetup();
@@ -85,29 +93,26 @@ void loop() {
 
   }
   smartDelay(0); 
+  repetitive_Task();
 }
 
 
 void repetitive_Task( ){
-    String Telemetry_string;
     packet_count ++;
     
     // Read Sensor Data
-
     //GPS data
     gpsGetTime( &gpsSecond , &gpsMinute, &gpsHour , &gpsDay, &gpsMonth , &gpsYear , &dateValid , &timeValid);        
     gpsReading(&noSats , &latitude , &lat , &gpsAltitude , &satsValid, &locValid  , &altValid );
-
     //BNO data
     bnoGetValues( &xAngle , &yAngle , &zAngle , &acceleration, &bnoValid );
-
     //BMP data
     bmpGetValues(&temprature, &altitude ,&pressure, &bmpValid);
 
-    // Apply filter on pressure data
+    // Apply filter
     
     //Make telemetry packet
-    String telemetry_string ;
+    String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid );
 
     //Transmit data to GCS over Xbee
     if ( telemetry  ){
