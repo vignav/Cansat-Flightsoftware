@@ -19,11 +19,28 @@
 #define satLen 2
 #define tiltLen 6
 
-String makeTelemetryPacket(String MISSION_TIME, int packet_count, String MODE, String STATE, float alt, String HS_DEPLOYED, String PC_DEPLOYED, String MAST_RAISED, float temp, float pressure, String VOLTAGE, String GPS_TIME, float gps_altitude, float gps_latitude, float gps_longitude, int gps_sats, float tilt_x, float tilt_y, String CMD_ECHO)
+enum states {
+  IDLE ,
+  LAUNCH_WAIT ,
+  ASCENT ,
+  DECENT ,
+  PAYLOAD_SEPARATED , 
+  PARACHUTE_DEPLOYED ,
+  LANDED
+};
+enum modes {
+  FLIGHT,
+  SIMULATION
+};
+
+
+String makeTelemetryPacket( int packet_count, int MODE, int STATE, float alt, bool HS_DEPLOYED, bool PC_DEPLOYED, bool MAST_RAISED, float temp, float pressure, float VOLTAGE, int gpss, int gpsm, int gpsh , float gps_altitude, float gps_latitude, float gps_longitude, int gps_sats, float tilt_x, float tilt_y, String CMD_ECHO , bool gpstimeValid , bool gpsaltValid , bool gpslocValid , bool satsValid , bool bmpValid)
 {
+    String MISSION_TIME = printTime( RTChour() ,RTCminute() , RTCseconds(), true  );
     String PACKET_COUNT = printInt(packet_count, packetLength, true);
-    String ALTITUDE = printFloat(alt, altitudeLen, 1, true);
-    String TEMPERATURE = printFloat(temp, tempLen, 1,true);
+    String mode_str =  
+    String ALTITUDE = printFloat(alt, altitudeLen, 1,altValid);
+    String TEMPERATURE = printFloat(temp, tempLen, 1,PRESSURE);
     String PRESSURE = printFloat(pressure, pressLen, 1, true);
     String GPS_ALTITUDE = printFloat(gps_altitude, altiLen, 1, true);
     String GPS_LATITUDE = printFloat(gps_latitude, latiLen, 4, true);
@@ -37,20 +54,9 @@ String makeTelemetryPacket(String MISSION_TIME, int packet_count, String MODE, S
     return packet;
 }
 
-void sendDataTelemetry(String telemetry)
-{
-
-    return ;
-}
-
-String recieveDataTelemetry()
-{
-    // Recieve one packet
-    return ;
-}
 void parsePacket( String packet , String *arr , int n , char a = ',')
 {
-    int pos = 0;
+    unsigned int pos = 0;
     for (int i = 0 ; (pos = packet.indexOf(',')) != packet.length() && i < n-1 ; i++ )
     {
         arr[i] = packet.substring(0, pos);
@@ -58,14 +64,13 @@ void parsePacket( String packet , String *arr , int n , char a = ',')
     }   
     arr[n-1] = packet;
 }
+
 void CX(String *p)
 {
-    if (p[3] == "ON")
-    {
+    if (p[3] == "ON"){
         
     }
-
-    if (p[3] == "OFF")
+    else if (p[3] == "OFF")
     {
         
     }
@@ -94,44 +99,36 @@ void ST(String p[])
 
 void SIM(String *p)
 {
-    if (p[3] == "ENABLE")
-    {
+    if (p[3] == "ENABLE"){
         
     }
-
-    if (p[3] == "DISABLE")
-    {
+    else if (p[3] == "DISABLE"){
         
     }
-    else
-    {
+    else{
         
     }
 }
 
 void SIMP(String *p)
 {
-    
+   //Set pressure to recieved value 
 }
 
 void CAL(String *p)
 {
-    
+   //Run calibration  
 }
 
 void CAM(String *p)
 {
-    if (p[3] == "ON")
-    {
+    if (p[3] == "ON"){
         
     }
-
-    if (p[3] == "OFF")
-    {
+    else if (p[3] == "OFF"){
         
     }
-    else
-    {
+    else{
         
     }
 }
@@ -168,11 +165,11 @@ void CAL_TILT(String *p)
     
 }
 
-String packetCheck(String packet)
+void packetCheck(String packet)
 {
-    int no_of_packets = 4;
-    String p[no_of_packets];
-    parsePacket(packet,p,no_of_packets);
+    int no_of_fields = 4;
+    String p[no_of_fields];
+    parsePacket(packet,p,no_of_fields);
 
     if (p[2] == "CX")
     {
