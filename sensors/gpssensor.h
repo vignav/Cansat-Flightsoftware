@@ -28,6 +28,18 @@ void gpsGetTime( int *second , int *minute , int *hour , int *day ,int *month , 
   *dateValid = gps.date.isValid();
 }
 
+void gpsGetValues ( int *sats , bool *satsValid , float *lat , float *lng , bool *locValid , float *alt , bool *altValid ){
+  *sats = gps.satellites.value();
+  *satsValid = gps.satellites.isValid();
+  
+  *lat = gps.location.lat();
+  *lng = gps.location.lng();
+  *locValid = gps.location.isValid();
+  
+  *altValid = gps.altitude.isValid();
+  *alt = gps.altitude.meters();
+}
+
 // This custom version of delay() ensures that the gps object
 // is being "fed".
 static void smartDelay(unsigned long ms)
