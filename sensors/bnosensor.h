@@ -32,6 +32,7 @@ void bnoReading(){
 }
 
 void bnoGetValues( float *x ,float *y , float*z ,float *acce ,bool *valid ){
+  bno.getEvent(&event);
   float tx = (float)event.orientation.x;
   float ty = (float)event.orientation.y;
   float tz = (float)event.orientation.z;
@@ -49,4 +50,22 @@ void bnoGetValues( float *x ,float *y , float*z ,float *acce ,bool *valid ){
   *x = tx;
   *y = ty;
   *z = tz;
+}
+
+void bnoGetXAcc(float *xAcc)
+{
+  imu::Vector<3> acc = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  *xAcc = acc.x();
+}
+
+void bnoGetYAcc(float *yAcc)
+{
+  imu::Vector<3> acc = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  *yAcc = acc.y();
+}
+
+void bnoGetZAcc(float *zAcc)
+{
+  imu::Vector<3> acc = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  *zAcc = acc.z();
 }
