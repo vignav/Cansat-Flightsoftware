@@ -6,26 +6,15 @@
 #include "./sensors/gpssensor.h"
 #include "xbeeComms.h"
 
-enum states {
-  IDLE ,
-  LAUNCH_WAIT ,
-  ASCENT ,
-  DECENT ,
-  PAYLOAD_SEPARATED , 
-  PARACHUTE_DEPLOYED ,
-  LANDED
-};
-enum modes {
-  FLIGHT,
-  SIMULATION
-};
 
 int currentState = IDLE ;
 int currentMode = FLIGHT ;
 int packet_count=0;
 bool HS_deployed = false;
 bool PC_deployed = false;
-bool MAST_raise = false;
+bool MAST_raised = false;
+
+float voltage;
 
 float zero_alt_calib;
 bool telemetry = true;
@@ -36,7 +25,7 @@ bool bmpValid = false ;
 float xAngle = 0 , yAngle = 0 , zAngle = 0 , acceleration = 0 ;
 bool bnoValid = false ;
 
-float noSats = 0 , latitude = 0 , lat = 0 , gpsAltitude = 0 ;
+float noSats = 0 , lat = 0 , lng = 0 , gpsAltitude = 0 ;
 bool satsValid = false, locValid = false, altValid = false;
 
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
@@ -46,14 +35,14 @@ bool timeValid =false , dateValid =false ;
 void setup(){
   // put your setup code here, to run once:
   // Go to EEPROM and get values of state, mode, packet_count and zero_alt_calibration
-  currentState = EEreadInt(1);
+/*  currentState = EEreadInt(1);
   currentMode = EEreadInt(2);
   packet_count = EEreadInt(3);
   zero_alt_calib = EEreadFloat(4);
   HS_deployed = EEreadInt(5);
   PC_deployed = EEreadInt(6);
-  MAST_raise = EEreadInt(7);
-
+  MAST_raised = EEreadInt(7);
+*/
   bnoSetup();
   bmpSetup();
   gpsSetup();
@@ -103,17 +92,27 @@ void repetitive_Task( ){
     // Read Sensor Data
     //GPS data
     gpsGetTime( &gpsSecond , &gpsMinute, &gpsHour , &gpsDay, &gpsMonth , &gpsYear , &dateValid , &timeValid);        
-    gpsReading(&noSats , &latitude , &lat , &gpsAltitude , &satsValid, &locValid  , &altValid );
+    gpsReading(&noSats , &lat , &lat , &gpsAltitude , &satsValid, &locValid  , &altValid );
     //BNO data
     bnoGetValues( &xAngle , &yAngle , &zAngle , &acceleration, &bnoValid );
     //BMP data
-    bmpGetValues(&temprature, &altitude ,&pressure, &bmpValid);
+    if ( currentMode == FLIGHT ){
+      bmpGetValues(&temprature, &altitude ,&pressure, &bmpValid);
+    }
 
     // Apply filter
     
-    //Make telemetry packet
-    String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid );
 
+    //Process recieved commmands
+    String CMD_ECHO="";
+
+    //get packet 
+    //process it 
+
+    
+    //Make telemetry packet
+    String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid,bmpValid, bnoValid);
+    Serial.println(telemetry_string);
     //Transmit data to GCS over Xbee
     if ( telemetry  ){
         sendDataTelemetry(telemetry_string);
@@ -125,12 +124,4 @@ void repetitive_Task( ){
     EEwriteInt(currentState , 1);
     EEwriteInt(currentMode, 2);
     EEwriteInt(packet_count, 3);
-    
-    //Process recieved commmands
-    
-    //get packet 
-    //process it 
-
-
-
 }
