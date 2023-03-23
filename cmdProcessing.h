@@ -26,7 +26,6 @@ void ST(String p[])
     }
 }
 
-
 void packetCheck(String packet)
 {
     int no_of_fields = 4;
