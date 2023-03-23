@@ -33,7 +33,7 @@ enum modes {
   FLIGHT,
   SIMULATION
 };
-String str_states[] = { "IDLE","LAUNCH_WAIT" , "ASCENT" ,  "DECENT" ,  "PAYLOAD_SEPARATED" , "PARACHUTE_DEPLOYED" , "LANDED"};
+String str_states[] = { "              IDLE","         LAUNCH_WAIT" , "            ASCENT" ,  "            DECENT" ,  " PAYLOAD_SEPARATED" , "PARACHUTE_DEPLOYED" , "            LANDED"};
 String str_modes[] = { "F" , "S" };
 
 String makeTelemetryPacket( int packet_count, int MODE, int STATE, float alt, bool HS_DEPLOYED, bool PC_DEPLOYED, bool MAST_RAISED, float temp, float pressure, float voltage, int gpss, int gpsm, int gpsh , float gps_altitude, float gps_latitude, float gps_longitude, int gps_sats, float tilt_x, float tilt_y, String CMD_ECHO , bool gpstimeValid , bool gpsaltValid , bool gpslocValid , bool satsValid , bool bmpValid, bool bnoValid)
