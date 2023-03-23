@@ -1,3 +1,12 @@
-void smartDelay(int millis){
-    delay(millis);
+#include "sensors/gpssensor.h"
+// This custom version of delay() ensures that the gps object
+// is being "fed".
+static void smartDelay(unsigned long ms)
+{
+  unsigned long start = millis();
+  do 
+  {
+      processGps();
+
+  } while (millis() - start < ms);
 }

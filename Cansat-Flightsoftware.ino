@@ -1,6 +1,8 @@
 #include "eeprom_rw.h"
 #include "actuators.h"
 #include "telemetry.h"
+#include "cmdProcessing.h"
+#include "smartDelay.h"
 #include "./sensors/bnosensor.h"
 #include "./sensors/bmpsensor.h"
 #include "./sensors/gpssensor.h"
@@ -14,10 +16,13 @@ bool HS_deployed = false;
 bool PC_deployed = false;
 bool MAST_raised = false;
 
-float voltage;
 
-float zero_alt_calib;
+float zero_alt_calib = 0;
 bool telemetry = true;
+bool tilt_calibration = false ;
+bool simulation_enabled = false;
+
+float voltage = 0;
 
 float temprature = 0 , altitude = 0 , pressure = 0 ; 
 bool bmpValid = false ;
@@ -53,6 +58,13 @@ void loop() {
   // put your main code here, to run repeatedly:
   switch(currentState){
     case IDLE:
+      if(tilt_calibration){
+        int tilt_cal_status = bnoCalibration();
+//        sendDataTelemetry(String("Tilt Calibration: ")+String(tilt_cal_status)+String("|"));
+        if ( !tilt_cal_status ){
+          tilt_calibration = false;
+        }
+      }
       break;
     case LAUNCH_WAIT:
       // check if cansat has started accending if yes change state
@@ -107,9 +119,11 @@ void repetitive_Task( ){
     String CMD_ECHO="";
 
     //get packet 
-    //process it 
+    if( packetAvailable() ){
+      String packetRecieved = recieveDataTelemetry();
+      packetCheck(packetRecieved);
+    }
 
-    
     //Make telemetry packet
     String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid,bmpValid, bnoValid);
     Serial.println(telemetry_string);

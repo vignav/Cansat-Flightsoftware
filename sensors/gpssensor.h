@@ -40,14 +40,7 @@ void gpsGetValues ( int *sats , bool *satsValid , float *lat , float *lng , bool
   *alt = gps.altitude.meters();
 }
 
-// This custom version of delay() ensures that the gps object
-// is being "fed".
-static void smartDelay(unsigned long ms)
-{
-  unsigned long start = millis();
-  do 
-  {
+void processGps(){
     while (gpsSerial.available())
       gps.encode(gpsSerial.read());
-  } while (millis() - start < ms);
 }
