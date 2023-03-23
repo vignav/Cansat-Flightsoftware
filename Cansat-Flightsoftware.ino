@@ -1,6 +1,8 @@
 #include "eeprom_rw.h"
 #include "actuators.h"
 #include "telemetry.h"
+#include "cmdProcessing.h"
+#include "smartDelay.h"
 #include "./sensors/bnosensor.h"
 #include "./sensors/bmpsensor.h"
 #include "./sensors/gpssensor.h"
@@ -58,7 +60,7 @@ void loop() {
     case IDLE:
       if(tilt_calibration){
         int tilt_cal_status = bnoCalibration();
-        sendDataTelemetry(String("Tilt Calibration: ")String(tilt_cal_status)+String("|"));
+//        sendDataTelemetry(String("Tilt Calibration: ")+String(tilt_cal_status)+String("|"));
         if ( !tilt_cal_status ){
           tilt_calibration = false;
         }
@@ -119,10 +121,9 @@ void repetitive_Task( ){
     //get packet 
     if( packetAvailable() ){
       String packetRecieved = recieveDataTelemetry();
+      packetCheck(packetRecieved);
     }
-    //process it 
 
-    
     //Make telemetry packet
     String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid,bmpValid, bnoValid);
     Serial.println(telemetry_string);
