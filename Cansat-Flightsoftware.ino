@@ -1,13 +1,16 @@
-#include "eeprom_rw.h"
-#include "actuators.h"
-#include "telemetry.h"
-#include "cmdProcessing.h"
-#include "smartDelay.h"
-#include "./sensors/bnosensor.h"
-#include "./sensors/bmpsensor.h"
-#include "./sensors/gpssensor.h"
-#include "xbeeComms.h"
-
+enum states {
+  IDLE ,
+  LAUNCH_WAIT ,
+  ASCENT ,
+  DECENT ,
+  PAYLOAD_SEPARATED , 
+  PARACHUTE_DEPLOYED ,
+  LANDED
+};
+enum modes {
+  FLIGHT,
+  SIMULATION
+};
 
 int currentState = IDLE ;
 int currentMode = FLIGHT ;
@@ -22,7 +25,7 @@ bool telemetry = true;
 bool tilt_calibration = false ;
 bool simulation_enabled = false;
 
-float voltage = 0;
+float voltage = 1.1;
 
 float temprature = 0 , altitude = 0 , pressure = 0 ; 
 bool bmpValid = false ;
@@ -36,18 +39,26 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid =false , dateValid =false ;
 
+#include "eeprom_rw.h"
+#include "actuators.h"
+#include "telemetry.h"
+#include "cmdProcessing.h"
+#include "./sensors/bmpsensor.h"
+#include "./sensors/gpssensor.h"
+#include "xbeeComms.h"
+#include "smartDelay.h"
+#include "./sensors/bnosensor.h"
 
 void setup(){
   // put your setup code here, to run once:
   // Go to EEPROM and get values of state, mode, packet_count and zero_alt_calibration
-/*  currentState = EEreadInt(1);
+  currentState = EEreadInt(1);
   currentMode = EEreadInt(2);
   packet_count = EEreadInt(3);
   zero_alt_calib = EEreadFloat(4);
   HS_deployed = EEreadInt(5);
   PC_deployed = EEreadInt(6);
   MAST_raised = EEreadInt(7);
-*/
   bnoSetup();
   bmpSetup();
   gpsSetup();
@@ -60,7 +71,7 @@ void loop() {
     case IDLE:
       if(tilt_calibration){
         int tilt_cal_status = bnoCalibration();
-//        sendDataTelemetry(String("Tilt Calibration: ")+String(tilt_cal_status)+String("|"));
+        sendDataTelemetry(String("Tilt Calibration: ")+String(tilt_cal_status)+String("|"));
         if ( !tilt_cal_status ){
           tilt_calibration = false;
         }
@@ -93,7 +104,7 @@ void loop() {
 
 
   }
-  smartDelay(0); 
+  smartDelay(1000); 
   repetitive_Task();
 }
 
@@ -120,7 +131,7 @@ void repetitive_Task( ){
 
     //get packet 
     if( packetAvailable() ){
-      String packetRecieved = recieveDataTelemetry();
+      String packetRecieved = getOnePacket();
       packetCheck(packetRecieved);
     }
 

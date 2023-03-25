@@ -18,22 +18,8 @@
 #define longiLen 7
 #define satLen 2
 #define tiltLen 6
-#define voltlen 2
-
-enum states {
-  IDLE ,
-  LAUNCH_WAIT ,
-  ASCENT ,
-  DECENT ,
-  PAYLOAD_SEPARATED , 
-  PARACHUTE_DEPLOYED ,
-  LANDED
-};
-enum modes {
-  FLIGHT,
-  SIMULATION
-};
-String str_states[] = { "              IDLE","         LAUNCH_WAIT" , "            ASCENT" ,  "            DECENT" ,  " PAYLOAD_SEPARATED" , "PARACHUTE_DEPLOYED" , "            LANDED"};
+#define voltlen 4
+String str_states[] = { "              IDLE","         LAUNCH_WAIT" , "            ASCENT" ,  "           DESCENT" ,  " PAYLOAD_SEPARATED" , "PARACHUTE_DEPLOYED" , "            LANDED"};
 String str_modes[] = { "F" , "S" };
 
 String makeTelemetryPacket( int packet_count, int MODE, int STATE, float alt, bool HS_DEPLOYED, bool PC_DEPLOYED, bool MAST_RAISED, float temp, float pressure, float voltage, int gpss, int gpsm, int gpsh , float gps_altitude, float gps_latitude, float gps_longitude, int gps_sats, float tilt_x, float tilt_y, String CMD_ECHO , bool gpstimeValid , bool gpsaltValid , bool gpslocValid , bool satsValid , bool bmpValid, bool bnoValid)
@@ -43,7 +29,7 @@ String makeTelemetryPacket( int packet_count, int MODE, int STATE, float alt, bo
     String ALTITUDE = printFloat(alt, altitudeLen, 1,bmpValid);
     String TEMPERATURE = printFloat(temp, tempLen, 1,bmpValid);
     String PRESSURE = printFloat(pressure, pressLen, 1, bmpValid);
-    String VOLTAGE = printFloat(voltlen, voltlen, 1, true);
+    String VOLTAGE = printFloat(voltage, voltlen, 1, true);
     String GPS_TIME = printTime( gpsh ,gpsm, gpss, gpstimeValid  );
     String GPS_ALTITUDE = printFloat(gps_altitude, altiLen, 1, gpsaltValid);
     String GPS_LATITUDE = printFloat(gps_latitude, latiLen, 4, gpslocValid);

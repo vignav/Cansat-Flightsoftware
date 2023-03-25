@@ -1,32 +1,31 @@
-bool checkAlt(float alt)
+#define MOVINGAVG 5
+bool checkAlt(float alt , float lessthanAlti)
 {
   static int count = 0;
-  static float arr[5];
-  if(count<5)
+  static float arr[MOVINGAVG];
+  if(count<MOVINGAVG)
   {
     arr[count] = alt;
     count++;
     return false;
   }
-
-  
   
   int mean=0;
-
-  for(int i=0; i<5; i++)
+  for(int i=0; i<MOVINGAVG; i++){
     mean+= arr[i];
-
-    mean = mean/5;
-
-    if(abs(mean-alt)>error)
-    {
-      return false;
-    }
-
-  for(int i=0;i<4;i++)
+  }
+  mean = mean/MOVINGAVG;
+  
+  for(int i=0;i<MOVINGAVG-1;i++){
     arr[i] = arr[i+1];
- 
-  arr[4] = alt;
+  }
+  arr[MOVINGAVG-1] = alt;
 
-  return true;
+  if( mean > lessthanAlti  )
+  {
+    return false;
+  }
+  else{
+    return true;
+  }
 }

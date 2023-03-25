@@ -18,7 +18,7 @@ bool packetAvailable(){
     return( xbeeCommandinput.length() != 0 );
 }
 
-String recieveDataTelemetry()
+void recieveDataTelemetry()
 {
     while ( xbeeSerial.available() ){
         char nextchar = xbeeSerial.read();
@@ -32,7 +32,7 @@ String recieveDataTelemetry()
 }
 
 String getOnePacket(){
-    String packet = xbeeCommandinput.subString(0,xbeeCommandinput.indexOf('|'));
-    xbeeCommandinput = xbeeCommandinput.subString(xbeeCommandinput.indexOf('|')+1);
+    String packet = xbeeCommandinput.substring(0,xbeeCommandinput.indexOf('|'));
+    xbeeCommandinput = xbeeCommandinput.substring(xbeeCommandinput.indexOf('|')+1);
     return packet;
 }
