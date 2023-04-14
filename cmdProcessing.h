@@ -96,6 +96,10 @@ void packetCheck(String packet)
     {
         currentState = IDLE;
     }
+    else if (p[2] == "LAUNCH_WAIT")
+    {
+        currentState = LAUNCH_WAIT;
+    }
     /*
      * no need because it is taken care by SIM command
     else if (p[2] == "MODE")

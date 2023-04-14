@@ -39,6 +39,7 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid =false , dateValid =false ;
 
+#include "checkheight.h"
 #include "eeprom_rw.h"
 #include "actuators.h"
 #include "telemetry.h"
@@ -79,25 +80,43 @@ void loop() {
       break;
     case LAUNCH_WAIT:
       // check if cansat has started accending if yes change state
+      if ( movingUp() ){
+        currentState = ASCENT;
+      }
       break;
     case ASCENT:
       // check if cansat has stopped accent and started going downwards ( decreasing altitude)
+      if ( movingDown() ){
+        currentState = DECENT;
+      }
       break;
     case DECENT:
       // Check if altitude is less than 500m if yes change state to payload_separated 
+      if ( checkAlt(500) ){
+        currentState = PAYLOAD_SEPARATED;
+      }
       break;
     case PAYLOAD_SEPARATED:
       //Check if altitude is 200m then change state and relase parachute 
       deployProbe();
+      deployHeatSheild();//probably release this after little height 
+      if ( checkAlt(200) ){
+        currentState = PARACHUTE_DEPLOYED;
+      }
       break;
     case PARACHUTE_DEPLOYED:
       //deploy parachute function
       deployParachute();
        //If there is no movement then move to landed state
+      if( notMoving() ){
+        currentState = LANDED;
+      }
       break;
     case LANDED:
       // Open flag and just wait do nothing
+      raiseFlag();
       // Turn off heatsheild motor
+      stopDeployingHeatSheild();
       break;
     default:
       break;
@@ -135,6 +154,7 @@ void repetitive_Task( ){
       packetCheck(packetRecieved);
     }
 
+    updateAlt(altitude);
     //Make telemetry packet
     String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid,bmpValid, bnoValid);
     Serial.println(telemetry_string);
