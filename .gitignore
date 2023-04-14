@@ -1,4 +1,4 @@
-
+.DS_Store
 *.temp
 
 #cpp code because they will be used for testing and only .ino files are needed
