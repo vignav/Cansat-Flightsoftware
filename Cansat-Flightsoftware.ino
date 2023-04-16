@@ -141,9 +141,7 @@ void repetitive_Task( ){
     bnoGetValues();
     readVoltage(); 
     //BMP data
-    if ( currentMode == FLIGHT ){
-      bmpGetValues();
-    }
+    bmpGetValues();
 
     // Apply filter
     
@@ -154,13 +152,15 @@ void repetitive_Task( ){
     //get packet 
     if( packetAvailable() ){
       String packetRecieved = getOnePacket();
+      //CMD_ECHO = packetCheck(packetRecieved);
       packetCheck(packetRecieved);
     }
 
-    updateAlt(altitude);
+    updateAlt(altitude - zero_alt_calib);
+    
     //Make telemetry packet
     String telemetry_string = makeTelemetryPacket( );
-    //Serial.println(telemetry_string);
+
     //Transmit data to GCS over Xbee
     if ( telemetry  ){
         sendDataTelemetry(telemetry_string);
