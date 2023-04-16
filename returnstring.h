@@ -17,8 +17,14 @@ String addZeroToPrefix(String st, int n)
 String printFloat(double str, int len, int lenAfterDecimal, bool valid)
 {
   String finalStri;
+  bool neg = false;
   if (valid)
   {
+    if ( str < 0  ){
+      neg = true;
+      str *= -1;
+      len--;
+    }
     String s = String(str);
     int indexOfPt = s.indexOf(".");
 
@@ -30,17 +36,17 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
       finalStri = addZeroSuffix(s, zeroToSuffix);
     }
 
-      int lenBeforeDecimal = len - (lenAfterDecimal + 1);
+    int lenBeforeDecimal = len - (lenAfterDecimal + 1);
 
-      if(lenBeforeDecimal >= indexOfPt)
-      {
-        int zeroToPrefix = lenBeforeDecimal - indexOfPt;
-        finalStri = addZeroToPrefix(finalStri, zeroToPrefix);
-      }
-      else
-        return "INVALID";
-
-      return finalStri;
+    if(lenBeforeDecimal >= indexOfPt)
+    {
+      int zeroToPrefix = lenBeforeDecimal - indexOfPt;
+      finalStri = addZeroToPrefix(finalStri, zeroToPrefix);
+    }
+    if ( neg ){
+      finalStri = "-" + finalStri;
+    }
+    return finalStri;
   }
   else
   {
