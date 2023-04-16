@@ -11,7 +11,7 @@ void xbeeSetup(){
 
 void sendDataTelemetry(String telemetry)
 {
-    xbeeSerial.println(telemetry+String("\n"));
+    xbeeSerial.println(telemetry);
 }
 
 bool packetAvailable(){

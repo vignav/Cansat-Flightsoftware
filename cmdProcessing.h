@@ -1,7 +1,7 @@
-void parsePacket( String packet , String *arr , int n , char a = ',')
+void parsePacket( String packet , String *arr , int n , char a )
 {
     unsigned int pos = 0;
-    for (int i = 0 ; (pos = packet.indexOf(',')) != packet.length() && i < n-1 ; i++ )
+    for (int i = 0 ; (pos = packet.indexOf(a)) != packet.length() && i < n-1 ; i++ )
     {
         arr[i] = packet.substring(0, pos);
         packet = packet.substring(pos + 1);
@@ -30,7 +30,7 @@ void packetCheck(String packet)
 {
     int no_of_fields = 4;
     String p[no_of_fields];
-    parsePacket(packet,p,no_of_fields);
+    parsePacket(packet,p,no_of_fields,',');
 
     if (p[2] == "CX")
     {

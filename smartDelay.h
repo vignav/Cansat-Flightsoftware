@@ -9,7 +9,7 @@ static void smartDelay(unsigned long ms)
       recieveDataTelemetry(); 
       processGps();
       if ( currentMode == FLIGHT ){
-        bmpGetValues(&temprature, &altitude ,&pressure, &bmpValid);
+        bmpGetValues();
         updateAlt(altitude);
       }
   } while (millis() - start < ms);

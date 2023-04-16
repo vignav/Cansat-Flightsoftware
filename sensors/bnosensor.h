@@ -30,25 +30,25 @@ void bnoReading(){
   bno.getEvent(&event);
 }
 
-void bnoGetValues( float *x ,float *y , float*z ,float *acce ,bool *valid ){
+void bnoGetValues(){
   bno.getEvent(&event);
   float tx = (float)event.orientation.x;
   float ty = (float)event.orientation.y;
   float tz = (float)event.orientation.z;
   
   imu::Vector<3> acc = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-  *valid = true;
+  bnoValid = true;
   if ( ty == 0.00 && tx == 0.00 && tz == 0.00 ){
     if ( bnoCheck() == 0 ){
-        *valid = false;
+        bnoValid = false;
         bno.begin();
         smartDelay(100);
     }
   }
-  *acce = sqrt(acc.x() * acc.x() + acc.y() * acc.y() + acc.z() * acc.z());
-  *x = tx;
-  *y = ty;
-  *z = tz;
+  acceleration = sqrt(acc.x() * acc.x() + acc.y() * acc.y() + acc.z() * acc.z());
+  xAngle = tx;
+  yAngle = ty;
+  zAngle = tz;
 }
 
 void bnoGetXAcc(float *xAcc)

@@ -25,7 +25,7 @@ bool telemetry = true;
 bool tilt_calibration = false ;
 bool simulation_enabled = false;
 
-float voltage = 1.1;
+float voltage = 0;
 
 float temprature = 0 , altitude = 0 , pressure = 0 ; 
 bool bmpValid = false ;
@@ -39,13 +39,15 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid =false , dateValid =false ;
 
+#include "./sensors/battery.h"
+#include "./sensors/gpssensor.h"
+#include "RTCtime.h"
 #include "checkheight.h"
 #include "eeprom_rw.h"
 #include "actuators.h"
-#include "telemetry.h"
 #include "cmdProcessing.h"
+#include "telemetry.h"
 #include "./sensors/bmpsensor.h"
-#include "./sensors/gpssensor.h"
 #include "xbeeComms.h"
 #include "smartDelay.h"
 #include "./sensors/bnosensor.h"
@@ -136,10 +138,11 @@ void repetitive_Task( ){
     gpsGetTime( &gpsSecond , &gpsMinute, &gpsHour , &gpsDay, &gpsMonth , &gpsYear , &dateValid , &timeValid);        
     gpsReading(&noSats , &lat , &lat , &gpsAltitude , &satsValid, &locValid  , &altValid );
     //BNO data
-    bnoGetValues( &xAngle , &yAngle , &zAngle , &acceleration, &bnoValid );
+    bnoGetValues();
+    readVoltage(); 
     //BMP data
     if ( currentMode == FLIGHT ){
-      bmpGetValues(&temprature, &altitude ,&pressure, &bmpValid);
+      bmpGetValues();
     }
 
     // Apply filter
@@ -156,8 +159,8 @@ void repetitive_Task( ){
 
     updateAlt(altitude);
     //Make telemetry packet
-    String telemetry_string = makeTelemetryPacket( packet_count, currentMode,currentState, altitude, HS_deployed, PC_deployed , MAST_raised , temprature, pressure, voltage, gpsSecond ,gpsMinute,gpsHour, gpsAltitude, lat , lng , noSats, xAngle,yAngle,CMD_ECHO , timeValid , altValid , locValid ,satsValid,bmpValid, bnoValid);
-    Serial.println(telemetry_string);
+    String telemetry_string = makeTelemetryPacket( );
+    //Serial.println(telemetry_string);
     //Transmit data to GCS over Xbee
     if ( telemetry  ){
         sendDataTelemetry(telemetry_string);

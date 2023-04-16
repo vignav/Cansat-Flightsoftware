@@ -4,7 +4,8 @@
 
 void setTimeGps()
 {
-
+    gpsGetTime( &gpsSecond , &gpsMinute, &gpsHour , &gpsDay, &gpsMonth , &gpsYear , &dateValid , &timeValid);        
+    setTime( gpsHour , gpsMinute , gpsSecond , gpsDay , gpsMonth , gpsYear); 
     return ;
 }
 

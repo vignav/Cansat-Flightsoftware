@@ -8,8 +8,8 @@ void battSetup()
   pinMode(battPin, INPUT);
 }
 
-void readVoltage(float* voltage)
+void readVoltage()
 {
   float vJun = map(analogRead(battPin), 0, 1023, 0, 3.3); 
-  *voltage = ((r1 + r2)/r2)*vJun;
+  voltage = ((r1 + r2)/r2)*vJun;
 }

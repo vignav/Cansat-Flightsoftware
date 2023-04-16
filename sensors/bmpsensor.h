@@ -20,16 +20,16 @@ int bmpSetup(){
 }
 
 
-void bmpGetValues(float *temp, float *alt ,float *pressure , bool *valid){
+void bmpGetValues(){
   if (! bmp.performReading()) {
     //Failed to read DATA
-    *valid=false;
+    bmpValid=false;
     bmpSetup();
   }
   else{
-    *temp = bmp.temperature;
-    *alt = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-    *pressure = bmp.pressure / 100.0;
-    *valid = true;
+    temprature = bmp.temperature;
+    altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+    pressure = bmp.pressure / 100.0;
+    bmpValid = true;
   }
 }
