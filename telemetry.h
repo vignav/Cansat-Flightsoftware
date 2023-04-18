@@ -18,7 +18,15 @@
 #define satLen 2
 #define tiltLen 6
 #define voltlen 4
-String str_states[] = { "              IDLE","         LAUNCH_WAIT" , "            ASCENT" ,  "           DESCENT" ,  " PAYLOAD_SEPARATED" , "PARACHUTE_DEPLOYED" , "            LANDED"};
+String str_states[] = { 
+    "              IDLE",
+    "       LAUNCH_WAIT", 
+    "            ASCENT",
+    "           DESCENT",
+    " PAYLOAD_SEPARATED",
+    "PARACHUTE_DEPLOYED",
+    "            LANDED"
+};
 String str_modes[] = { "F" , "S" };
 
 String makeTelemetryPacket()
@@ -36,10 +44,10 @@ String makeTelemetryPacket()
     String GPS_SATS = printInt(noSats, satLen, satsValid);
     String TILT_X = printFloat(xAngle, tiltLen, 2, bnoValid);
     String TILT_Y = printFloat(yAngle, tiltLen, 2, bnoValid);
-    String CMD_ECHO = "";
     String comma = ",";
 
     String packet = "1062";
     packet += comma + MISSION_TIME + comma + PACKET_COUNT + comma + str_modes[currentMode] + comma + str_states[currentState]+ comma + ALTITUDE + comma + (HS_deployed?"N":"P") + comma + (PC_deployed?"N":"C") + comma + (MAST_raised?"N":"M") + comma + TEMPERATURE + comma + VOLTAGE + comma + PRESSURE  + comma + GPS_TIME + comma + GPS_ALTITUDE + comma + GPS_LATITUDE + comma + GPS_LONGITUDE + comma + GPS_SATS + comma + TILT_X + comma + TILT_Y + comma + CMD_ECHO;
+    CMD_ECHO = "" ;
     return packet;
 }

@@ -25,6 +25,7 @@ bool telemetry = true;
 bool tilt_calibration = false ;
 bool simulation_enabled = false;
 
+String CMD_ECHO = "";
 float voltage = 0;
 
 float temprature = 0 , altitude = 0 , pressure = 0 ;
@@ -39,6 +40,7 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
 
+#include "led_buzzer.h"
 #include "./sensors/battery.h"
 #include "./sensors/gpssensor.h"
 #include "RTCtime.h"
@@ -62,10 +64,14 @@ void setup() {
   HS_deployed = EEreadInt(5);
   PC_deployed = EEreadInt(6);
   MAST_raised = EEreadInt(7);
+  led_buzzer_Setup();
   bnoSetup();
   bmpSetup();
   gpsSetup();
-
+  buzzerON();
+  redON();
+  blueON();
+  greenON();
 }
 
 void loop() {
@@ -149,8 +155,6 @@ void repetitive_Task( ) {
 
 
   //Process recieved commmands
-  String CMD_ECHO = "";
-
   //get packet
   if ( packetAvailable() ) {
     String packetRecieved = getOnePacket();
@@ -159,10 +163,10 @@ void repetitive_Task( ) {
 
   updateAlt(altitude);
   //Make telemetry packet
-  String telemetry_string = makeTelemetryPacket( );
+  String telemetry_string = makeTelemetryPacket();
   //Serial.println(telemetry_string);
   //Transmit data to GCS over Xbee
-  if ( telemetry  ) {
+  if ( telemetry ){
     sendDataTelemetry(telemetry_string);
   }
 

@@ -9,20 +9,31 @@ void parsePacket( String packet , String *arr , int n , char a )
     arr[n-1] = packet;
 }
 
-void ST(String p[])
+bool ST(String p[])
 {   
     if ( p[3] == "GPS" ){
         //set time using gps
         setTimeGps();
+        return true;
     }
     else{
         String arr[3];
+        int arrInt[3];
         parsePacket(p[3],arr,3,':');
-        int hr = arr[0].toInt();
-        int min = arr[1].toInt();
-        int sec = arr[2].toInt();
+        
+        for ( int i = 0 ; i < 3; i++ ){
+            arrInt[i] = arr[i].toInt(); 
+            if ( arr[i] != "00" && arrInt[i] == 0 ){
+                return false;
+            }
+        }
+        
+        int hr = arrInt[0];
+        int min = arrInt[1];
+        int sec = arrInt[2];
         //set RTCtime 
         setTime_td(hr,min,sec);
+        return true;
     }
 }
 
@@ -31,33 +42,39 @@ void packetCheck(String packet)
     int no_of_fields = 4;
     String p[no_of_fields];
     parsePacket(packet,p,no_of_fields,',');
-
     if (p[2] == "CX")
     {
         if (p[3] == "ON"){
             telemetry = true;
+            CMD_ECHO="CX";
         }
         else if (p[3] == "OFF")
         {
             telemetry = false;
+            CMD_ECHO="CX";
         }
     }
     else if (p[2] == "ST")
     {
-        ST(p);
+        if ( ST(p) ){
+            CMD_ECHO="ST";
+        }
     }
     else if (p[2] == "SIM")
     {
         if ( currentState == IDLE ){
             if (p[3] == "ENABLE"){
                 simulation_enabled = true ;
+                CMD_ECHO="SIM";
             }
             else if (p[3] == "DISABLE"){
                 simulation_enabled = false;
                 currentMode = FLIGHT;
+                CMD_ECHO="SIM";
             }
             else if (p[3] == "ACTIVATE" && simulation_enabled){
                 currentMode = SIMULATION;
+                CMD_ECHO="SIM";
             }
         }
     }
@@ -65,16 +82,23 @@ void packetCheck(String packet)
     {
         //Set pressure to recieved value 
         if ( currentMode == SIMULATION ){
-            pressure = p[3].toFloat();
+            float temp = p[3].toFloat();
+            if ( temp != 0 ){
+                pressure = temp;
+                // impliment conversion from pressure to altitude 
+                CMD_ECHO="SIMP";
+            }
         }
     }
     else if (p[2] == "CAL")
     {
         //Set zero alt calibration ( only if in idle mode )
         if ( currentState == IDLE ){
-            zero_alt_calib = altitude; 
+            if ( altValid ){
+                zero_alt_calib = altitude; 
+                CMD_ECHO = "CAL";
+            }
         }
-        //u can use altValid to give error
     }
     else if (p[2] == "CAM")
     {
