@@ -82,10 +82,12 @@ void packetCheck(String packet)
     {
         //Set pressure to recieved value 
         if ( currentMode == SIMULATION ){
-            float temp = p[3].toFloat();
-            if ( temp != 0 ){
-                pressure = temp;
+            float tempPressure = p[3].toFloat();
+            if ( tempPressure != 0 ){
+                pressure = tempPressure;
                 // impliment conversion from pressure to altitude 
+                // 44330 * [1 - (P/p0)^(1/5.255) ]
+                altitude =( 44330 * ( 1 - pow( (pressure / 1013.25 ), (1/5.225) )  )) - zero_alt_calib;
                 CMD_ECHO="SIMP";
             }
         }
@@ -93,11 +95,10 @@ void packetCheck(String packet)
     else if (p[2] == "CAL")
     {
         //Set zero alt calibration ( only if in idle mode )
-        if ( currentState == IDLE ){
-            if ( altValid ){
+        if ( currentState == IDLE && bnoValid ){
                 zero_alt_calib = altitude; 
+                EEwriteFloat(altitude, 4);
                 CMD_ECHO = "CAL";
-            }
         }
     }
     else if (p[2] == "CAM")

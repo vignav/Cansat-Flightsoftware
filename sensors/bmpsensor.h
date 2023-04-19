@@ -30,7 +30,8 @@ void bmpGetValues(){
     temprature = bmp.temperature;
     bmpValid = true;
     if ( currentMode == FLIGHT ){
-      altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+      altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) - zero_alt_calib;
+
       pressure = bmp.pressure / 100.0;
     }
   }
