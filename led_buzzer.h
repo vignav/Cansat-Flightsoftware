@@ -7,14 +7,14 @@ void led_buzzer_Setup(){
     pinMode(redLED,OUTPUT);
     pinMode(blueLED,OUTPUT);
     pinMode(greenLED,OUTPUT);
-    pinMode(buzzer,OUTPUT);
+    pinMode(buzzerPIN,OUTPUT);
 }
 
 void buzzerON(){
-    digitalWrite(buzzer,HIGH);
+    digitalWrite(buzzerPIN,HIGH);
 }
 void buzzerOFF(){
-    digitalWrite(buzzer,LOW);
+    digitalWrite(buzzerPIN,LOW);
 }
 
 //LED ON
