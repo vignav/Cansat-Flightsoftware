@@ -40,6 +40,7 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
 
+#include "sdcard.h"
 #include "led_buzzer.h"
 #include "./sensors/battery.h"
 #include "./sensors/gpssensor.h"
@@ -65,6 +66,7 @@ void setup() {
   PC_deployed = EEreadInt(6);
   MAST_raised = EEreadInt(7);
   led_buzzer_Setup();
+  SDsetup();
   bnoSetup();
   bmpSetup();
   gpsSetup();
@@ -170,7 +172,8 @@ void repetitive_Task( ) {
     sendDataTelemetry(telemetry_string);
   }
 
-  //Save Data to sd card
+  //Save Data to sd card  
+  saveTelemetryInSdCard(telemetry_string);
 
   // Save state to EEPROM
   EEwriteInt(currentState , 1);
