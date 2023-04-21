@@ -3,7 +3,6 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <math.h>
-#include <BasicLinearAlgebra.h>
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
 sensors_event_t event;
@@ -71,21 +70,3 @@ void bnoGetZAcc(float *zAcc)
   *zAcc = acc.z();
 }
 
-
-
-void upacceleration(){
- imu::Vector<3> ACCE = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-  imu::Vector<3> GRAV = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY);
-double gravitationatdesti=9.81;
-double ax=GRAV.x()/gravitationatdesti;
-double ay=GRAV.y()/gravitationatdesti;
-double az=GRAV.z()/gravitationatdesti;
-BLA::Matrix<3, 1> accelerationbno={ACCE.x(),ACCE.y(),ACCE.z()};
-//BLA::Matrix<3, 1> accelerationbno={GRAV.x(),GRAV.y(),GRAV.z()};
-BLA::Matrix<3, 3> RMGRAV = {(ay*ay-ax*ax*az)/(ax*ax+ay*ay),(-ax*ay-ax*ay*az)/(ax*ax+ay*ay),ax,
-                           (-ax*ay-ax*ay*az)/(ax*ax+ay*ay), (ax*ax-ay*ay*az)/(ax*ax+ay*ay),ay,
-                           -ax,-ay,-az};
-//BLA::Matrix<3, 3> INRMa=Invert(RMGRAV);
-BLA::Matrix<3, 1> rotatedacc=RMGRAV*accelerationbno;
-  
-}
