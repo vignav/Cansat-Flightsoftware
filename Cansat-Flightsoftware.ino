@@ -52,8 +52,8 @@ bool timeValid = false , dateValid = false ;
 #include "telemetry.h"
 #include "./sensors/bmpsensor.h"
 #include "xbeeComms.h"
-#include "smartDelay.h"
 #include "./sensors/bnosensor.h"
+#include "smartDelay.h"
 
 void setup() {
   // put your setup code here, to run once:

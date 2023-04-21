@@ -42,8 +42,6 @@ void bnoGetValues(){
   if ( ty == 0.00 && tx == 0.00 && tz == 0.00 ){
     if ( bnoCheck() == 0 ){
         bnoValid = false;
-        bno.begin();
-        smartDelay(100);
     }
   }
   acceleration = sqrt(acc.x() * acc.x() + acc.y() * acc.y() + acc.z() * acc.z());

@@ -6,6 +6,10 @@ static void smartDelay(unsigned long ms)
   unsigned long start = millis();
   do 
   {
+      if ( !bnoValid ){
+        bno.begin();
+        bnoValid = true;
+      }
       recieveDataTelemetry(); 
       processGps();
       if ( currentMode == FLIGHT ){
