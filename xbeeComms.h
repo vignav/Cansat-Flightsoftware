@@ -1,7 +1,7 @@
 #include <string>
+#include <SoftwareSerial.h>
 
-
-#define xbeeSerial Serial
+#define xbeeSerial Serial8
 #define xbeeBaud 9600
 
 String xbeeCommandinput = "";
@@ -21,13 +21,9 @@ bool packetAvailable(){
 void recieveDataTelemetry()
 {
     while ( xbeeSerial.available() ){
-        char nextchar = xbeeSerial.read();
-        if ( nextchar == '\n'){
-            xbeeCommandinput += "|";
-        }
-        else {
-            xbeeCommandinput += String(nextchar);
-        }
+        String newCmd = xbeeSerial.readStringUntil('\n');
+        xbeeCommandinput += newCmd ;
+        xbeeCommandinput += "|";
     }
 }
 

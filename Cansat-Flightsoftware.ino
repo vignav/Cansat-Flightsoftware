@@ -70,6 +70,7 @@ void setup() {
   bnoSetup();
   bmpSetup();
   gpsSetup();
+  xbeeSetup();
   buzzerON();
   redON();
   blueON();
