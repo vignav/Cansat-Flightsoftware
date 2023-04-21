@@ -48,12 +48,12 @@ bool timeValid = false , dateValid = false ;
 #include "checkheight.h"
 #include "eeprom_rw.h"
 #include "actuators.h"
-#include "cmdProcessing.h"
 #include "telemetry.h"
 #include "./sensors/bmpsensor.h"
 #include "xbeeComms.h"
 #include "./sensors/bnosensor.h"
 #include "smartDelay.h"
+#include "cmdProcessing.h"
 
 void setup() {
   // put your setup code here, to run once:

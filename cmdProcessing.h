@@ -88,6 +88,7 @@ void packetCheck(String packet)
                 // impliment conversion from pressure to altitude 
                 // 44330 * [1 - (P/p0)^(1/5.255) ]
                 altitude =( 44330 * ( 1 - pow( (pressure / 1013.25 ), (1/5.225) )  )) - zero_alt_calib;
+                bnoValid = true;
                 CMD_ECHO="SIMP";
             }
         }
@@ -95,10 +96,14 @@ void packetCheck(String packet)
     else if (p[2] == "CAL")
     {
         //Set zero alt calibration ( only if in idle mode )
-        if ( currentState == IDLE && bnoValid ){
-                zero_alt_calib = altitude; 
-                EEwriteFloat(altitude, 4);
-                CMD_ECHO = "CAL";
+        if ( currentState == IDLE && bmpValid ){
+                zero_alt_calib =   0;
+                bmpGetValues();
+                if ( bmpValid ){
+                    zero_alt_calib =   altitude;
+                    EEwriteFloat(altitude, 4);
+                    CMD_ECHO = "CAL";
+                }
         }
     }
     else if (p[2] == "CAM")
