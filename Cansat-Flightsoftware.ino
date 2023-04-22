@@ -40,7 +40,6 @@ bool satsValid = false, locValid = false, altValid = false;
 
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
-//#include "camera.h"
 #include "sdcard.h"
 #include "led_buzzer.h"
 #include "./sensors/battery.h"
@@ -54,6 +53,7 @@ bool timeValid = false , dateValid = false ;
 #include "xbeeComms.h"
 #include "./sensors/bnosensor.h"
 #include "smartDelay.h"
+#include "camera.h"
 #include "cmdProcessing.h"
 
 void setup() {
@@ -72,8 +72,9 @@ void setup() {
   bmpSetup();
   gpsSetup();
   xbeeSetup();
-  buzzerON();
+  cameraSetup();
   redON();
+  buzzerON();
 }
 
 void loop() {

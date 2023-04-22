@@ -5,13 +5,13 @@ void cameraSetup(){
 }
 
 void cameraStart( ){
-    digitalWrite(cameraPin,HIGH);
-    smartDelay(200);
     digitalWrite(cameraPin,LOW);
+    smartDelay(200);
+    digitalWrite(cameraPin,HIGH);
 }
 
 void cameraStop( ){
-    digitalWrite(cameraPin,HIGH);
-    smartDelay(1000);
     digitalWrite(cameraPin,LOW);
+    smartDelay(1000);
+    digitalWrite(cameraPin,HIGH);
 }
