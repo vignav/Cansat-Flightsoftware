@@ -74,12 +74,24 @@ void setup() {
   xbeeSetup();
   buzzerON();
   redON();
-  blueON();
-  greenON();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  if ( telemetry ){
+    blueON();
+  }
+  else{
+    blueOFF();
+  }
+
+  if ( bmpValid && bnoValid && timeValid && dateValid && satsValid && locValid && altValid ){
+    greenON();
+  }
+  else{
+    greenOFF();
+  }
+
   switch (currentState) {
     case IDLE:
       if (tilt_calibration) {
