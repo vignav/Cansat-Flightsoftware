@@ -1,7 +1,7 @@
 #define redLED 4
 #define blueLED 3
 #define greenLED 2
-#define buzzerPIN 5
+#define buzzerPIN 36
 
 void led_buzzer_Setup(){
     pinMode(redLED,OUTPUT);
