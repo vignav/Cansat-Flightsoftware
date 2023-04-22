@@ -9,6 +9,9 @@ static void smartDelay(unsigned long ms)
       if ( !bnoValid ){
         bno.begin();
         bnoValid = true;
+     }
+      if(!bmpValid){
+        bmpSetup();
       }
       recieveDataTelemetry(); 
       processGps();

@@ -24,11 +24,10 @@ void bmpGetValues(){
   if (! bmp.performReading()) {
     //Failed to read DATA
     bmpValid=false;
-    bmpSetup();
   }
   else{
-    temprature = bmp.temperature;
     bmpValid = true;
+    temprature = bmp.temperature;
     if ( currentMode == FLIGHT ){
       altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) - zero_alt_calib;
 
