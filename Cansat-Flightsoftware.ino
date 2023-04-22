@@ -1,3 +1,4 @@
+#define packetTimePeriod 1000
 enum states {
   IDLE ,
   LAUNCH_WAIT ,
@@ -134,7 +135,7 @@ void loop() {
 
 
   }
-  smartDelay(1000);
+  smartDelay(packetTimePeriod);
   repetitive_Task();
 }
 
