@@ -7,6 +7,7 @@
 String xbeeCommandinput = "";
 void xbeeSetup(){
     xbeeSerial.begin(xbeeBaud);
+    xbeeSerial.setTimeout(100);
 }
 
 void sendDataTelemetry(String telemetry)
@@ -20,15 +21,11 @@ bool packetAvailable(){
 
 void recieveDataTelemetry()
 {
-    while ( xbeeSerial.available() ){
-        String newCmd = xbeeSerial.readStringUntil('\n');
-        xbeeCommandinput += newCmd ;
-        xbeeCommandinput += "|";
-    }
+    xbeeCommandinput += xbeeSerial.readString();
 }
 
 String getOnePacket(){
-    String packet = xbeeCommandinput.substring(0,xbeeCommandinput.indexOf('|'));
-    xbeeCommandinput = xbeeCommandinput.substring(xbeeCommandinput.indexOf('|')+1);
+    String packet = xbeeCommandinput.substring(0,xbeeCommandinput.indexOf('\n'));
+    xbeeCommandinput = xbeeCommandinput.substring(xbeeCommandinput.indexOf('\n')+1);
     return packet;
 }
