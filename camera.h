@@ -1,3 +1,5 @@
+#define cameraPin 7
+
 void cameraSetup(){
     pinMode(cameraPin,OUTPUT);
 }

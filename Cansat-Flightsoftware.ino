@@ -40,7 +40,7 @@ bool satsValid = false, locValid = false, altValid = false;
 
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
-
+//#include "camera.h"
 #include "sdcard.h"
 #include "led_buzzer.h"
 #include "./sensors/battery.h"
