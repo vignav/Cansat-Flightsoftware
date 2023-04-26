@@ -1,6 +1,6 @@
 #include <Servo.h>
 
-#define probePin 1
+#define probePin 8
 #define probeDeployAngle 120
 #define probeLockAngle 50
 
