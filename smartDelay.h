@@ -19,5 +19,20 @@ static void smartDelay(unsigned long ms)
         bmpGetValues();
         updateAlt(altitude);
       }
+      if (resetShort()){
+
+        currentState = IDLE ;
+        currentMode = FLIGHT ;
+        packet_count = 0;
+        HS_deployed = false;
+        PC_deployed = false;
+        MAST_raised = false;
+
+
+        zero_alt_calib = 0;
+        telemetry = true;
+        tilt_calibration = false ;
+        simulation_enabled = false;
+      }
   } while (millis() - start < ms);
 }
