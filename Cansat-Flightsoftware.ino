@@ -73,6 +73,7 @@ void setup() {
   gpsSetup();
   xbeeSetup();
   cameraSetup();
+  actuatorSetup();
   redON();
   buzzerON();
 }
