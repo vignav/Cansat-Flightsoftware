@@ -1,4 +1,7 @@
 #define packetTimePeriod 1000
+#include <TimeLib.h>
+
+
 enum states {
   IDLE ,
   LAUNCH_WAIT ,
@@ -67,6 +70,7 @@ void setup() {
   PC_deployed = EEreadInt(6);
   MAST_raised = EEreadInt(7);
   led_buzzer_Setup();
+  setSyncProvider(getTeensy3Time);
   SDsetup();
   bnoSetup();
   bmpSetup();
@@ -74,6 +78,8 @@ void setup() {
   xbeeSetup();
   cameraSetup();
   actuatorSetup();
+  RTCsetup();
+
   redON();
   buzzerON();
 }
