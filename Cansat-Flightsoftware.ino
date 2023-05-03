@@ -43,6 +43,8 @@ bool satsValid = false, locValid = false, altValid = false;
 
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
+
+#include "reset.h"
 #include "sdcard.h"
 #include "led_buzzer.h"
 #include "./sensors/battery.h"
@@ -71,6 +73,7 @@ void setup() {
   MAST_raised = EEreadInt(7);
   led_buzzer_Setup();
   setSyncProvider(getTeensy3Time);
+  resetSetup();
   SDsetup();
   bnoSetup();
   bmpSetup();
