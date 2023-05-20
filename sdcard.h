@@ -10,10 +10,10 @@ void SDsetup()
         //failed
         return;
     }
-    // open the file. 
-    //logFile = SD.open("logs.txt", FILE_WRITE);
 }
-
+void failedWrite (){
+    // Runs when writing to Sd card fails
+}
 void saveTelemetryInSdCard( String telemetryString )
 {
     // if the file opened okay, write to it:
@@ -23,7 +23,17 @@ void saveTelemetryInSdCard( String telemetryString )
         telemetryFile.close();
     } else {
         // Failed to write to file
+        failedWrite();
     }
 }
 
-
+void log( String logdata ){
+    logFile = SD.open("logs.txt", FILE_WRITE);
+    if (logFile) {
+        logFile.println(logdata);
+        logFile.close();
+    } else {
+        // Failed to write to file
+        failedWrite();
+    }
+}
