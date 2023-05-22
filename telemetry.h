@@ -47,7 +47,7 @@ String makeTelemetryPacket()
     String comma = ",";
 
     String packet = "1062";
-    packet += comma + MISSION_TIME + comma + PACKET_COUNT + comma + str_modes[currentMode] + comma + str_states[currentState]+ comma + ALTITUDE + comma + (HS_deployed?"N":"P") + comma + (PC_deployed?"N":"C") + comma + (MAST_raised?"N":"M") + comma + TEMPERATURE + comma + VOLTAGE + comma + PRESSURE  + comma + GPS_TIME + comma + GPS_ALTITUDE + comma + GPS_LATITUDE + comma + GPS_LONGITUDE + comma + GPS_SATS + comma + TILT_X + comma + TILT_Y + comma + CMD_ECHO;
+    packet += comma + MISSION_TIME + comma + PACKET_COUNT + comma + str_modes[currentMode] + comma + str_states[currentState]+ comma + ALTITUDE + comma + (HS_deployed?"P":"N") + comma + (PC_deployed?"C":"N") + comma + (MAST_raised?"M":"N") + comma + TEMPERATURE + comma + VOLTAGE + comma + PRESSURE  + comma + GPS_TIME + comma + GPS_ALTITUDE + comma + GPS_LATITUDE + comma + GPS_LONGITUDE + comma + GPS_SATS + comma + TILT_X + comma + TILT_Y + comma + CMD_ECHO;
     CMD_ECHO = "" ;
     return packet;
 }
