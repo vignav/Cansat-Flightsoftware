@@ -44,6 +44,10 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
 
+float adjusted_alt= 0 ;
+float adjusted_pressure= 0 ;
+bool pressureValid = false ;
+
 #include "reset.h"
 #include "sdcard.h"
 #include "led_buzzer.h"
@@ -174,9 +178,7 @@ void repetitive_Task( ) {
   bnoGetValues();
   readVoltage();
   //BMP data
-  if ( currentMode == FLIGHT ) {
-    bmpGetValues();
-  }
+  bmpGetValues();
 
   // Apply filter
 
@@ -188,7 +190,7 @@ void repetitive_Task( ) {
     packetCheck(packetRecieved);
   }
 
-  updateAlt(altitude);
+  updateAlt(adjusted_alt);
   //Make telemetry packet
   String telemetry_string = makeTelemetryPacket();
   //Serial.println(telemetry_string);

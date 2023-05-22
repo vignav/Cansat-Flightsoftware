@@ -33,10 +33,10 @@ String makeTelemetryPacket()
 {
     String MISSION_TIME = printTime( RTChour() ,RTCminute() , RTCseconds(), true  );
     String PACKET_COUNT = printInt(packet_count, packetLength, true); 
-    String ALTITUDE = printFloat(altitude, altitudeLen, 1,bmpValid);
+    String ALTITUDE = printFloat(adjusted_alt, altitudeLen, 1,pressureValid);
     String TEMPERATURE = printFloat(temprature, tempLen, 1,bmpValid);
     String VOLTAGE = printFloat(voltage, voltlen, 1, true);
-    String PRESSURE = printFloat(pressure, pressLen, 1, bmpValid);
+    String PRESSURE = printFloat(adjusted_pressure, pressLen, 1, pressureValid);
     String GPS_TIME = printTime( gpsHour ,gpsMinute, gpsSecond, timeValid  );
     String GPS_ALTITUDE = printFloat(gpsAltitude, altiLen, 1, altValid);
     String GPS_LATITUDE = printFloat(lat, latiLen, 4, locValid);

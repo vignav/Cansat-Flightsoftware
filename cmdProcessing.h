@@ -39,8 +39,8 @@ bool ST(String p[])
 
 void packetCheck(String packet)
 {
-    int no_of_fields = 4;
-    String p[no_of_fields];
+    int no_of_fields = 4 ;
+    String p[4] = {"","","",""};
     parsePacket(packet,p,no_of_fields,',');
     if (p[2] == "CX")
     {
@@ -75,6 +75,7 @@ void packetCheck(String packet)
             else if (p[3] == "ACTIVATE" && simulation_enabled){
                 currentMode = SIMULATION;
                 CMD_ECHO="SIM";
+                zero_alt_calib = 0 ;
             }
         }
     }
@@ -84,11 +85,11 @@ void packetCheck(String packet)
         if ( currentMode == SIMULATION ){
             float tempPressure = p[3].toFloat();
             if ( tempPressure != 0 ){
-                pressure = tempPressure;
+                adjusted_pressure= tempPressure;
                 // impliment conversion from pressure to altitude 
                 // 44330 * [1 - (P/p0)^(1/5.255) ]
-                altitude =( 44330 * ( 1 - pow( (pressure / 1013.25 ), (1/5.225) )  )) - zero_alt_calib;
-                bnoValid = true;
+                adjusted_alt=( 44330 * ( 1 - pow( (adjusted_pressure/ 101325 ), (1/5.225) )  )) - zero_alt_calib;
+                pressureValid = true;
                 CMD_ECHO="SIMP";
             }
         }

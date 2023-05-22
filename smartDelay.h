@@ -17,7 +17,7 @@ static void smartDelay(unsigned long ms)
       processGps();
       if ( currentMode == FLIGHT ){
         bmpGetValues();
-        updateAlt(altitude);
+        updateAlt(adjusted_alt);
       }
       if (resetShort()){
 
