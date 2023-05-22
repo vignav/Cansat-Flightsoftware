@@ -20,14 +20,14 @@ bool ST(String p[])
         String arr[3];
         int arrInt[3];
         parsePacket(p[3],arr,3,':');
-        
+
         for ( int i = 0 ; i < 3; i++ ){
             arrInt[i] = arr[i].toInt(); 
             if ( arr[i] != "00" && arrInt[i] == 0 ){
                 return false;
             }
         }
-        
+
         int hr = arrInt[0];
         int min = arrInt[1];
         int sec = arrInt[2];
@@ -115,12 +115,12 @@ void packetCheck(String packet)
     else if (p[2] == "CAM")
     {
         if (p[3] == "ON"){
-           cameraStart();
-           CMD_ECHO = "CAM";
+            cameraStart();
+            CMD_ECHO = "CAM";
         }
         else if (p[3] == "OFF"){
-           cameraStop();
-           CMD_ECHO = "CAM";
+            cameraStop();
+            CMD_ECHO = "CAM";
         }
     }
     else if (p[2] == "START")
@@ -140,13 +140,13 @@ void packetCheck(String packet)
     }
     /*
      * no need because it is taken care by SIM command
-    else if (p[2] == "MODE")
+     else if (p[2] == "MODE")
+     {
+    //only if in idle mode
+    if (p[3] == "F")
     {
-        //only if in idle mode
-        if (p[3] == "F")
-        {
-           currentMode = FLIGHT; 
-        }
+    currentMode = FLIGHT; 
+    }
     }*/
     else if (p[2] == "CAL_TILT")
     {
