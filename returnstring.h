@@ -155,7 +155,7 @@ String printTime(int hour, int minute, int second, bool valid)
     }
     else
     {
-        tim="**********" ;  
+        tim="********" ;  
     }
     return tim;
 }
