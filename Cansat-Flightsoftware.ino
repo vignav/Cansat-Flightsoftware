@@ -87,8 +87,7 @@ void setup() {
   actuatorSetup();
   RTCsetup();
 
-  redON();
-  buzzerON();
+  //buzzerON();
 }
 
 void loop() {
@@ -193,7 +192,7 @@ void repetitive_Task( ) {
   updateAlt(adjusted_alt);
   //Make telemetry packet
   String telemetry_string = makeTelemetryPacket();
-  //Serial.println(telemetry_string);
+
   //Transmit data to GCS over Xbee
   if ( telemetry ){
     sendDataTelemetry(telemetry_string);
