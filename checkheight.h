@@ -1,5 +1,5 @@
 #define MOVINGAVG 5
-#define ERR_DIFF 5
+#define ERR_DIFF 1
 float arr[MOVINGAVG]={0,0,0,0,0}; // add more zeros here if u are increasing MOVINGAVG
 void updateAlt(float alt  )
 {
