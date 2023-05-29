@@ -24,6 +24,9 @@ void bmpGetValues(){
   if (! bmp.performReading()) {
     //Failed to read DATA
     bmpValid=false;
+    if ( currentMode == FLIGHT){
+      pressureValid = false ;
+    }
   }
   else{
     bmpValid = true;
