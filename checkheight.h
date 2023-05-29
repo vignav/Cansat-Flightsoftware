@@ -9,15 +9,35 @@ void updateAlt(float alt  )
   }
   arr[MOVINGAVG-1] = alt;
 }
-bool checkAlt(float lessthanAlti) {
+float getFiltered(){
   int mean=0;
   for(int i=0; i<MOVINGAVG; i++){
     mean+= arr[i];
   }
   mean = mean/MOVINGAVG;
+  return ( mean );
+}
 
-  if( mean > lessthanAlti  )
-  {
+/*
+#define ALPHA 0.9
+float y = 0;
+void updateAlt(float alt  )
+{
+  y = y * ( 1 - ALPHA ) + ALPHA * alt ;
+  
+  for(int i=0;i<MOVINGAVG-1;i++){
+    arr[i] = arr[i+1];
+  }
+  arr[MOVINGAVG-1] = alt;
+}
+float getFiltered(){
+  return(y);
+}
+*/
+
+bool checkAlt(float lessthanAlti) {
+  float mean = getFiltered();
+  if( mean > lessthanAlti  ){
     return false;
   }
   else{
