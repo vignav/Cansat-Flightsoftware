@@ -76,12 +76,13 @@ bool movingDown(){
 
 bool notMoving (){
   int j = 0;
+  float filtered_alt = getFiltered();
   for(int i=1;i<MOVINGAVG ;i++){
-    if ( arr[i] < arr[i-1]+ERR_DIFF || arr[i] > arr[i-1]-ERR_DIFF ){
+    if ( arr[i] < filtered_alt + ERR_DIFF || arr[i] > filtered_alt - ERR_DIFF ){
       j++;
     }
   }
-  if ( j*5 > 3*MOVINGAVG ){
+  if ( j == MOVINGAVG ){
     return true;
   }
   else {
