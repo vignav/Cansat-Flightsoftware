@@ -162,7 +162,8 @@ void loop() {
 
 
   }
-  smartDelay(packetTimePeriod);
+
+  smartDelay(1000 -183 );
   repetitive_Task();
 }
 
