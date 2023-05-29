@@ -1,5 +1,6 @@
 #define MOVINGAVG 5
 #define ERR_DIFF 1
+#define FRACTION 0.6
 float arr[MOVINGAVG]={0,0,0,0,0}; // add more zeros here if u are increasing MOVINGAVG
 void updateAlt(float alt  )
 {
@@ -30,7 +31,7 @@ bool movingUp(){
       j++;
     }
   }
-  if ( j*5 > 3*MOVINGAVG ){
+  if ( j > FRACTION * MOVINGAVG ){
     return true;
   }
   else {
@@ -45,7 +46,7 @@ bool movingDown(){
       j++;
     }
   }
-  if ( j*5 > 3*MOVINGAVG ){
+  if ( j > FRACTION*MOVINGAVG ){
     return true;
   }
   else {
