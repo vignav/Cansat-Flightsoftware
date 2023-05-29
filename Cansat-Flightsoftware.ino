@@ -174,7 +174,7 @@ void repetitive_Task( ) {
   // Read Sensor Data
   //GPS data
   gpsGetTime( &gpsSecond , &gpsMinute, &gpsHour , &gpsDay, &gpsMonth , &gpsYear , &dateValid , &timeValid);
-  gpsReading(&noSats , &lat , &lat , &gpsAltitude , &satsValid, &locValid  , &altValid );
+  gpsReading(&noSats , &lat , &lng , &gpsAltitude , &satsValid, &locValid  , &altValid );
   //BNO data
   bnoGetValues();
   readVoltage();
