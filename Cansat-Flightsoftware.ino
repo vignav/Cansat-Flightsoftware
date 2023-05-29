@@ -47,6 +47,7 @@ bool timeValid = false , dateValid = false ;
 float adjusted_alt= 0 ;
 float adjusted_pressure= 0 ;
 bool pressureValid = false ;
+bool SD_works = false;
 
 #include "reset.h"
 #include "sdcard.h"

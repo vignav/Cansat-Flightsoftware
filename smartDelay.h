@@ -34,5 +34,9 @@ static void smartDelay(unsigned long ms)
         tilt_calibration = false ;
         simulation_enabled = false;
       }
-  } while (millis() - start < ms);
+      if( !SD_works){
+        SDsetup();
+      }
+  } while (millis() - start < ms );
+
 }

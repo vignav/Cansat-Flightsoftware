@@ -8,11 +8,16 @@ void SDsetup()
 {
     if (!SD.begin(BUILTIN_SDCARD)) {
         //failed
+        Serial.println("failure");
+        SD_works = false;
         return;
     }
+    SD_works = true ;
 }
 void failedWrite (){
     // Runs when writing to Sd card fails
+    SD_works = false;
+    Serial.println("failure write");
 }
 void saveTelemetryInSdCard( String telemetryString )
 {
@@ -21,6 +26,7 @@ void saveTelemetryInSdCard( String telemetryString )
     if (telemetryFile) {
         telemetryFile.println(telemetryString);
         telemetryFile.close();
+        Serial.println("success");
     } else {
         // Failed to write to file
         failedWrite();
