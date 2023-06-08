@@ -128,15 +128,18 @@ void packetCheck(String packet)
         //only if in idle mode
         if( currentState == IDLE ){
             currentState = LAUNCH_WAIT;
+            WriteALL();
         }
     }
     else if (p[2] == "IDLE")
     {
         currentState = IDLE;
+        WriteALL();
     }
     else if (p[2] == "LAUNCH_WAIT")
     {
         currentState = LAUNCH_WAIT;
+        WriteALL();
     }
     /*
      * no need because it is taken care by SIM command
@@ -152,6 +155,35 @@ void packetCheck(String packet)
     {
         if ( currentState == IDLE ){
             tilt_calibration = true;
+        }
+    }
+    else if ( p[2] == "RESET" ){
+          lockProbe();
+          lockPrachute();
+          stopDeployingHeatSheild();
+          stopRaisingFlag();
+        currentState = IDLE ;
+        currentMode = FLIGHT ;
+        packet_count = 0;
+        HS_deployed = false;
+        PC_deployed = false;
+        MAST_raised = false;
+        zero_alt_calib = 0;
+        
+        WriteALL();
+        
+        telemetry = true;
+        tilt_calibration = false ;
+        simulation_enabled = false;
+    }
+    else if ( p[2] == "UNLOCK" ){
+        if ( currentState == IDLE ){
+            deployProbe();
+        }
+    }
+    else if ( p[2] == "LOCK"){
+        if ( currentState == IDLE ){
+            lockProbe();
         }
     }
 }

@@ -89,10 +89,17 @@ void setup() {
   RTCsetup();
 
   //buzzerON();
+  greenON();
+  redON();
+  lockProbe();
+  lockPrachute();
+  stopDeployingHeatSheild();
+  stopRaisingFlag();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
   if ( telemetry ){
     blueON();
   }
@@ -133,6 +140,7 @@ void loop() {
       // Check if altitude is less than 500m if yes change state to payload_separated
       if ( checkAlt(500) ) {
         currentState = PAYLOAD_SEPARATED;
+        deployProbe();
       }
       break;
     case PAYLOAD_SEPARATED:
@@ -144,6 +152,9 @@ void loop() {
       }
       break;
     case PARACHUTE_DEPLOYED:
+      deployProbe();
+      deployHeatSheild();//probably release this after little height
+      
       //deploy parachute function
       deployParachute();
       //If there is no movement then move to landed state
@@ -163,6 +174,7 @@ void loop() {
 
   }
 
+  WriteALL();
   smartDelay(1000 -183 );
   repetitive_Task();
 }
@@ -204,7 +216,6 @@ void repetitive_Task( ) {
   saveTelemetryInSdCard(telemetry_string);
 
   // Save state to EEPROM
-  EEwriteInt(currentState , 1);
-  EEwriteInt(currentMode, 2);
-  EEwriteInt(packet_count, 3);
+  WriteALL();
+
 }

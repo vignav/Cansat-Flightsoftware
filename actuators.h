@@ -42,7 +42,7 @@ void lockProbe()
 void deployParachute()
 {
     // Turn servo to deploy prachute
-   
+    PC_deployed = true ;
     paraServo.write(parachuteDeployAngle);
     return ;
 }
@@ -58,6 +58,7 @@ void lockPrachute()
 void raiseFlag()
 {
     // Turn servo to raise flag
+    MAST_raised = true ;
     digitalWrite(flagPin,HIGH);
     return;
 }
@@ -72,6 +73,7 @@ void stopRaisingFlag()
 void deployHeatSheild()
 {
     // Turn motor ( Turn pin High )
+    HS_deployed = true ;
     digitalWrite(landinglegsPin,HIGH);
     return ;
 }

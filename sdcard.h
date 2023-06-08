@@ -22,6 +22,9 @@ void failedWrite (){
 void saveTelemetryInSdCard( String telemetryString )
 {
     // if the file opened okay, write to it:
+   if ( !SD_works ){
+        return;
+    }
     telemetryFile = SD.open("telemetry.csv", FILE_WRITE);
     if (telemetryFile) {
         telemetryFile.println(telemetryString);
@@ -34,6 +37,9 @@ void saveTelemetryInSdCard( String telemetryString )
 }
 
 void log( String logdata ){
+    if ( !SD_works ){
+        return;
+    }
     logFile = SD.open("logs.txt", FILE_WRITE);
     if (logFile) {
         logFile.println(logdata);

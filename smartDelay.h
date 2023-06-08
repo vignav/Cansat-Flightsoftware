@@ -20,6 +20,10 @@ static void smartDelay(unsigned long ms)
         updateAlt(adjusted_alt);
       }
       if (resetShort()){
+        lockProbe();
+        lockPrachute();
+        stopDeployingHeatSheild();
+        stopRaisingFlag();
 
         currentState = IDLE ;
         currentMode = FLIGHT ;
@@ -29,22 +33,19 @@ static void smartDelay(unsigned long ms)
         MAST_raised = false;
         zero_alt_calib = 0;
         
-        EEwriteInt(currentState , 1);
-        EEwriteInt(currentMode, 2);
-        EEwriteInt(packet_count, 3);
-        EEwriteInt(zero_alt_calib, 4);
-        EEwriteInt(HS_deployed, 5);
-        EEwriteInt(PC_deployed, 6);
-        EEwriteInt(MAST_raised, 7);
+        WriteALL();
         
         telemetry = true;
         tilt_calibration = false ;
         simulation_enabled = false;
 
       }
-      if( !SD_works){
+      /*
+      if( !SD_works && currentState == IDLE ){
         SDsetup();
+        SD_works = true ;
       }
+      */
   } while (millis() - start < ms );
 
 }
