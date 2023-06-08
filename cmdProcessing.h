@@ -98,15 +98,17 @@ void packetCheck(String packet)
     {
         //Set zero alt calibration ( only if in idle mode )
         if ( currentState == IDLE ){
-            if( currentMode == FLIGHT && bmpValid ){
+            if( currentMode == FLIGHT  ){
                 bmpGetValues();
-                zero_alt_calib = adjusted_alt;
-                EEwriteFloat(zero_alt_calib, 4);
-                CMD_ECHO = "CAL";
+                if (bmpValid){
+                    zero_alt_calib = altitude;
+                    WriteALL();
+                    CMD_ECHO = "CAL";
+                }
             }
             else if ( currentMode == SIMULATION ){
                 zero_alt_calib = adjusted_alt;
-                EEwriteFloat(zero_alt_calib, 4);
+                WriteALL();
                 CMD_ECHO = "CAL";
             }
         }
