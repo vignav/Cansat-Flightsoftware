@@ -129,6 +129,9 @@ void loop() {
       if ( movingUp() ) {
         currentState = ASCENT;
       }
+      else if ( movingDown() ) {
+        currentState = DECENT;
+      }
       break;
     case ASCENT:
       // check if cansat has stopped accent and started going downwards ( decreasing altitude)
