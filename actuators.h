@@ -9,8 +9,8 @@
 #define probeLockAngle 50
 
 #define parachutePin 29
-#define parachuteDeployAngle 180
-#define parachuteLockAngle 60
+#define parachuteDeployAngle 90
+#define parachuteLockAngle 0
 
 #define flagPin 7
 #define landinglegsPin 5 
