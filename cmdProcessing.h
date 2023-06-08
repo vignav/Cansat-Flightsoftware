@@ -85,10 +85,10 @@ void packetCheck(String packet)
         if ( currentMode == SIMULATION ){
             float tempPressure = p[3].toFloat();
             if ( tempPressure != 0 ){
-                adjusted_pressure= tempPressure;
+                adjusted_pressure= tempPressure/100;
                 // impliment conversion from pressure to altitude 
                 // 44330 * [1 - (P/p0)^(1/5.255) ]
-                adjusted_alt=( 44330 * ( 1 - pow( (adjusted_pressure/ 101325 ), (1/5.225) )  )) - zero_alt_calib;
+                adjusted_alt=( 44330 * ( 1 - pow( (adjusted_pressure/ 1013.25 ), (1/5.225) )  )) - zero_alt_calib;
                 pressureValid = true;
                 CMD_ECHO="SIMP";
             }
