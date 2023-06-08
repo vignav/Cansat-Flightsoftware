@@ -39,8 +39,8 @@ String makeTelemetryPacket()
     String PRESSURE = printFloat(adjusted_pressure, pressLen, 1, pressureValid);
     String GPS_TIME = printTime( gpsHour ,gpsMinute, gpsSecond, timeValid  );
     String GPS_ALTITUDE = printFloat(gpsAltitude, altiLen, 1, altValid);
-    String GPS_LATITUDE = printFloat(lat, latiLen, 4, locValid);
-    String GPS_LONGITUDE = printFloat(lng, longiLen, 4, locValid);
+    String GPS_LATITUDE = printFloat(lat, latiLen, 6, locValid);
+    String GPS_LONGITUDE = printFloat(lng, longiLen, 6, locValid);
     String GPS_SATS = printInt(noSats, satLen, satsValid);
     String TILT_X = printFloat(xAngle, tiltLen, 2, bnoValid);
     String TILT_Y = printFloat(yAngle, tiltLen, 2, bnoValid);
