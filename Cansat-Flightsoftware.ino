@@ -49,6 +49,7 @@ float adjusted_pressure= 0 ;
 bool pressureValid = false ;
 bool SD_works = false;
 
+#include "actuators.h"
 #include "reset.h"
 #include "sdcard.h"
 #include "led_buzzer.h"
@@ -57,7 +58,6 @@ bool SD_works = false;
 #include "RTCtime.h"
 #include "checkheight.h"
 #include "eeprom_rw.h"
-#include "actuators.h"
 #include "telemetry.h"
 #include "./sensors/bmpsensor.h"
 #include "xbeeComms.h"
