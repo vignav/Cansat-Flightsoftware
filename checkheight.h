@@ -2,6 +2,7 @@
 #define ERR_DIFF 1
 #define FRACTION 0.6
 float arr[MOVINGAVG]={0,0,0,0,0}; // add more zeros here if u are increasing MOVINGAVG
+/*
 void updateAlt(float alt  )
 {
   for(int i=0;i<MOVINGAVG-1;i++){
@@ -17,8 +18,7 @@ float getFiltered(){
   mean = mean/MOVINGAVG;
   return ( mean );
 }
-
-/*
+*/
 #define ALPHA 0.9
 float y = 0;
 void updateAlt(float alt  )
@@ -33,7 +33,6 @@ void updateAlt(float alt  )
 float getFiltered(){
   return(y);
 }
-*/
 
 bool checkAlt(float lessthanAlti) {
   float mean = getFiltered();
@@ -77,12 +76,12 @@ bool movingDown(){
 bool notMoving (){
   int j = 0;
   float filtered_alt = getFiltered();
-  for(int i=1;i<MOVINGAVG ;i++){
-    if ( arr[i] < filtered_alt + ERR_DIFF || arr[i] > filtered_alt - ERR_DIFF ){
+  for(int i=0;i<MOVINGAVG ;i++){
+    if ( arr[i] < filtered_alt + ERR_DIFF && arr[i] > filtered_alt - ERR_DIFF ){
       j++;
     }
   }
-  if ( j == MOVINGAVG ){
+  if ( j == MOVINGAVG-1 ){
     return true;
   }
   else {
