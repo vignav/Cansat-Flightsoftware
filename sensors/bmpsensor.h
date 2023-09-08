@@ -24,14 +24,19 @@ void bmpGetValues(){
   if (! bmp.performReading()) {
     //Failed to read DATA
     bmpValid=false;
+    if ( currentMode == FLIGHT){
+      pressureValid = false ;
+    }
   }
   else{
     bmpValid = true;
     temprature = bmp.temperature;
-    if ( currentMode == FLIGHT ){
-      altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) - zero_alt_calib;
-
-      pressure = bmp.pressure / 100.0;
+    altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) ;
+    pressure = bmp.pressure / 100.0;
+    if ( currentMode == FLIGHT ) {
+      adjusted_alt = altitude - zero_alt_calib;
+      adjusted_pressure = pressure;
+      pressureValid = bmpValid;
     }
   }
 }

@@ -44,6 +44,12 @@ bool satsValid = false, locValid = false, altValid = false;
 int gpsSecond = 0 , gpsMinute = 0 , gpsHour = 0  , gpsDay = 0 , gpsMonth = 0, gpsYear = 0 ;
 bool timeValid = false , dateValid = false ;
 
+float adjusted_alt= 0 ;
+float adjusted_pressure= 0 ;
+bool pressureValid = false ;
+bool SD_works = false;
+
+#include "actuators.h"
 #include "reset.h"
 #include "sdcard.h"
 #include "led_buzzer.h"
@@ -52,7 +58,6 @@ bool timeValid = false , dateValid = false ;
 #include "RTCtime.h"
 #include "checkheight.h"
 #include "eeprom_rw.h"
-#include "actuators.h"
 #include "telemetry.h"
 #include "./sensors/bmpsensor.h"
 #include "xbeeComms.h"
@@ -83,12 +88,18 @@ void setup() {
   actuatorSetup();
   RTCsetup();
 
-  redON();
   buzzerON();
+  greenON();
+  redON();
+  lockProbe();
+  lockPrachute();
+  stopDeployingHeatSheild();
+  stopRaisingFlag();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
   if ( telemetry ){
     blueON();
   }
@@ -118,6 +129,9 @@ void loop() {
       if ( movingUp() ) {
         currentState = ASCENT;
       }
+      else if ( movingDown() ) {
+        currentState = DECENT;
+      }
       break;
     case ASCENT:
       // check if cansat has stopped accent and started going downwards ( decreasing altitude)
@@ -129,6 +143,7 @@ void loop() {
       // Check if altitude is less than 500m if yes change state to payload_separated
       if ( checkAlt(500) ) {
         currentState = PAYLOAD_SEPARATED;
+        deployProbe();
       }
       break;
     case PAYLOAD_SEPARATED:
@@ -140,6 +155,9 @@ void loop() {
       }
       break;
     case PARACHUTE_DEPLOYED:
+      deployProbe();
+      deployHeatSheild();//probably release this after little height
+      
       //deploy parachute function
       deployParachute();
       //If there is no movement then move to landed state
@@ -158,7 +176,9 @@ void loop() {
 
 
   }
-  smartDelay(packetTimePeriod);
+
+  WriteALL();
+  smartDelay(1000 -183 );
   repetitive_Task();
 }
 
@@ -169,14 +189,12 @@ void repetitive_Task( ) {
   // Read Sensor Data
   //GPS data
   gpsGetTime( &gpsSecond , &gpsMinute, &gpsHour , &gpsDay, &gpsMonth , &gpsYear , &dateValid , &timeValid);
-  gpsReading(&noSats , &lat , &lat , &gpsAltitude , &satsValid, &locValid  , &altValid );
+  gpsReading(&noSats , &lat , &lng , &gpsAltitude , &satsValid, &locValid  , &altValid );
   //BNO data
   bnoGetValues();
   readVoltage();
   //BMP data
-  if ( currentMode == FLIGHT ) {
-    bmpGetValues();
-  }
+  bmpGetValues();
 
   // Apply filter
 
@@ -188,10 +206,10 @@ void repetitive_Task( ) {
     packetCheck(packetRecieved);
   }
 
-  updateAlt(altitude);
+  updateAlt(adjusted_alt);
   //Make telemetry packet
   String telemetry_string = makeTelemetryPacket();
-  //Serial.println(telemetry_string);
+
   //Transmit data to GCS over Xbee
   if ( telemetry ){
     sendDataTelemetry(telemetry_string);
@@ -201,7 +219,6 @@ void repetitive_Task( ) {
   saveTelemetryInSdCard(telemetry_string);
 
   // Save state to EEPROM
-  EEwriteInt(currentState , 1);
-  EEwriteInt(currentMode, 2);
-  EEwriteInt(packet_count, 3);
+  WriteALL();
+
 }

@@ -1,58 +1,48 @@
 #include <Servo.h>
+// parachute and probe : servo 
+// landing legs and flag : motor
 
-#define probePin 8
-#define probeDeployAngle 120
-#define probeLockAngle 50
+// onboard transistor : pin 5
 
-#define parachutePin 2
-#define parachuteDeployAngle 180
-#define parachuteLockAngle 60
+#define probePin 28
+#define probeDeployAngle 180
+#define probeLockAngle 0
 
-#define flagPin 3
-#define flagRaiseAngle 120
-#define flagDownAngle 60
+#define parachutePin 29
+#define parachuteDeployAngle 90
+#define parachuteLockAngle 0
+
+#define flagPin 7
+#define landinglegsPin 5 
 
 Servo probeServo;
 Servo paraServo;
-Servo flagServo;
+
 void actuatorSetup()
 {
     probeServo.attach(probePin);
     paraServo.attach(parachutePin);
-    flagServo.attach(flagPin);
+    pinMode(flagPin,OUTPUT);
+    pinMode(landinglegsPin,OUTPUT);
 }
 void deployProbe()
 {
     // Turn servo to deploy probe
-   
     probeServo.write(probeDeployAngle);
     return ;
 }
-
 void lockProbe()
 {
     // Turn servo to lock probe
-    
     probeServo.write(probeLockAngle);
     return ;
 }
 
-void deployHeatSheild()
-{
-    // Turn motor ( Turn pin High )
-    return ;
-}
-
-void stopDeployingHeatSheild()
-{
-    // Stop turning motor ( Turn pin Low )
-    return ;
-}
 
 void deployParachute()
 {
     // Turn servo to deploy prachute
-   
+    PC_deployed = true ;
     paraServo.write(parachuteDeployAngle);
     return ;
 }
@@ -68,15 +58,30 @@ void lockPrachute()
 void raiseFlag()
 {
     // Turn servo to raise flag
-   
-    flagServo.write(flagRaiseAngle);
+    MAST_raised = true ;
+    digitalWrite(flagPin,HIGH);
+    return;
+}
+void stopRaisingFlag()
+{
+    // Turn servo to raise flag
+    digitalWrite(flagPin,LOW);
     return;
 }
 
-void lowerFlag()
+
+void deployHeatSheild()
 {
-    // Turn servo lower the flag
-   
-    flagServo.write(flagDownAngle);
-    return;
+    // Turn motor ( Turn pin High )
+    HS_deployed = true ;
+    digitalWrite(landinglegsPin,HIGH);
+    return ;
 }
+
+void stopDeployingHeatSheild()
+{
+    // Stop turning motor ( Turn pin Low )
+    digitalWrite(landinglegsPin,LOW);
+    return ;
+}
+

@@ -1,6 +1,6 @@
 String addZeroSuffix(String st, int n)
 {
-  for(int i=1;i<=n;i++)
+  for(int i=0;i<n;i++)
     st = st + "0";
   
   return st;
@@ -16,7 +16,7 @@ String addZeroToPrefix(String st, int n)
 
 String printFloat(double str, int len, int lenAfterDecimal, bool valid)
 {
-  String finalStri;
+  String finalStri="";
   bool neg = false;
   if (valid)
   {
@@ -25,9 +25,8 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
       str *= -1;
       len--;
     }
-    String s = String(str);
+    String s = String(str,len);
     int indexOfPt = s.indexOf(".");
-
     if((len)-(indexOfPt+1) >= lenAfterDecimal)
       finalStri = s.substring(0, (indexOfPt+1+lenAfterDecimal));
     else
@@ -35,7 +34,6 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
       int zeroToSuffix = lenAfterDecimal - (len - (indexOfPt+1));
       finalStri = addZeroSuffix(s, zeroToSuffix);
     }
-
     int lenBeforeDecimal = len - (lenAfterDecimal + 1);
 
     if(lenBeforeDecimal >= indexOfPt)
@@ -50,7 +48,6 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
   }
   else
   {
-    
     for (int i=0; i<len; i++)
       finalStri+="*";
   }
@@ -158,7 +155,7 @@ String printTime(int hour, int minute, int second, bool valid)
     }
     else
     {
-        tim="**********" ;  
+        tim="********" ;  
     }
     return tim;
 }

@@ -17,9 +17,13 @@ static void smartDelay(unsigned long ms)
       processGps();
       if ( currentMode == FLIGHT ){
         bmpGetValues();
-        updateAlt(altitude);
+        updateAlt(adjusted_alt);
       }
       if (resetShort()){
+        lockProbe();
+        lockPrachute();
+        stopDeployingHeatSheild();
+        stopRaisingFlag();
 
         currentState = IDLE ;
         currentMode = FLIGHT ;
@@ -27,12 +31,21 @@ static void smartDelay(unsigned long ms)
         HS_deployed = false;
         PC_deployed = false;
         MAST_raised = false;
-
-
         zero_alt_calib = 0;
+        
+        WriteALL();
+        
         telemetry = true;
         tilt_calibration = false ;
         simulation_enabled = false;
+
       }
-  } while (millis() - start < ms);
+      /*
+      if( !SD_works && currentState == IDLE ){
+        SDsetup();
+        SD_works = true ;
+      }
+      */
+  } while (millis() - start < ms );
+
 }

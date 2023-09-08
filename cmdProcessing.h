@@ -20,14 +20,14 @@ bool ST(String p[])
         String arr[3];
         int arrInt[3];
         parsePacket(p[3],arr,3,':');
-        
+
         for ( int i = 0 ; i < 3; i++ ){
             arrInt[i] = arr[i].toInt(); 
             if ( arr[i] != "00" && arrInt[i] == 0 ){
                 return false;
             }
         }
-        
+
         int hr = arrInt[0];
         int min = arrInt[1];
         int sec = arrInt[2];
@@ -39,8 +39,8 @@ bool ST(String p[])
 
 void packetCheck(String packet)
 {
-    int no_of_fields = 4;
-    String p[no_of_fields];
+    int no_of_fields = 4 ;
+    String p[4] = {"","","",""};
     parsePacket(packet,p,no_of_fields,',');
     if (p[2] == "CX")
     {
@@ -75,6 +75,7 @@ void packetCheck(String packet)
             else if (p[3] == "ACTIVATE" && simulation_enabled){
                 currentMode = SIMULATION;
                 CMD_ECHO="SIM";
+                zero_alt_calib = 0 ;
             }
         }
     }
@@ -84,11 +85,11 @@ void packetCheck(String packet)
         if ( currentMode == SIMULATION ){
             float tempPressure = p[3].toFloat();
             if ( tempPressure != 0 ){
-                pressure = tempPressure;
+                adjusted_pressure= tempPressure/100;
                 // impliment conversion from pressure to altitude 
                 // 44330 * [1 - (P/p0)^(1/5.255) ]
-                altitude =( 44330 * ( 1 - pow( (pressure / 1013.25 ), (1/5.225) )  )) - zero_alt_calib;
-                bnoValid = true;
+                adjusted_alt=( 44330 * ( 1 - pow( (adjusted_pressure/ 1013.25 ), (1/5.225) )  )) - zero_alt_calib;
+                pressureValid = true;
                 CMD_ECHO="SIMP";
             }
         }
@@ -96,26 +97,32 @@ void packetCheck(String packet)
     else if (p[2] == "CAL")
     {
         //Set zero alt calibration ( only if in idle mode )
-        if ( currentState == IDLE && bmpValid ){
-                zero_alt_calib =   0;
+        if ( currentState == IDLE ){
+            if( currentMode == FLIGHT  ){
                 bmpGetValues();
-                if ( bmpValid ){
-                    zero_alt_calib =   altitude;
-                    EEwriteFloat(altitude, 4);
+                if (bmpValid){
+                    zero_alt_calib = altitude;
+                    WriteALL();
                     CMD_ECHO = "CAL";
                 }
+            }
+            else if ( currentMode == SIMULATION ){
+                zero_alt_calib = adjusted_alt;
+                WriteALL();
+                CMD_ECHO = "CAL";
+            }
         }
     }
 
     else if (p[2] == "CAM")
     {
         if (p[3] == "ON"){
-           cameraStart();
-           CMD_ECHO = "CAM";
+            cameraStart();
+            CMD_ECHO = "CAM";
         }
         else if (p[3] == "OFF"){
-           cameraStop();
-           CMD_ECHO = "CAM";
+            cameraStop();
+            CMD_ECHO = "CAM";
         }
     }
     else if (p[2] == "START")
@@ -123,30 +130,84 @@ void packetCheck(String packet)
         //only if in idle mode
         if( currentState == IDLE ){
             currentState = LAUNCH_WAIT;
+            WriteALL();
         }
     }
     else if (p[2] == "IDLE")
     {
         currentState = IDLE;
+        WriteALL();
     }
     else if (p[2] == "LAUNCH_WAIT")
     {
         currentState = LAUNCH_WAIT;
+        WriteALL();
     }
     /*
      * no need because it is taken care by SIM command
-    else if (p[2] == "MODE")
+     else if (p[2] == "MODE")
+     {
+    //only if in idle mode
+    if (p[3] == "F")
     {
-        //only if in idle mode
-        if (p[3] == "F")
-        {
-           currentMode = FLIGHT; 
-        }
+    currentMode = FLIGHT; 
+    }
     }*/
     else if (p[2] == "CAL_TILT")
     {
         if ( currentState == IDLE ){
             tilt_calibration = true;
+            CMD_ECHO = "CAL_TILT";
         }
+    }
+    else if ( p[2] == "RESET" ){
+        lockProbe();
+        lockPrachute();
+        stopDeployingHeatSheild();
+        stopRaisingFlag();
+        currentState = IDLE ;
+        currentMode = FLIGHT ;
+        packet_count = 0;
+        HS_deployed = false;
+        PC_deployed = false;
+        MAST_raised = false;
+        zero_alt_calib = 0;
+
+        WriteALL();
+
+        telemetry = true;
+        tilt_calibration = false ;
+        simulation_enabled = false;
+        CMD_ECHO = "RESET";
+    }
+    else if ( p[2] == "UNLOCK" ){
+        if ( currentState == IDLE ){
+            deployProbe();
+            CMD_ECHO = "UNLOCK";
+        }
+    }
+    else if ( p[2] == "LOCK"){
+        if ( currentState == IDLE ){
+            lockProbe();
+            CMD_ECHO = "LOCK";
+        }
+    }
+    else if ( p[2] == "BUZZER_OFF" ){
+        buzzerOFF();
+    }
+    else if ( p[2] == "BUZZER_ON" ){
+        buzzerON();
+    }
+    else if ( p[2] == "DEPLOY_LEGS" ){
+        deployHeatSheild();
+    }
+    else if ( p[2] == "STOP_DEPLOY_LEGS" ){
+        stopDeployingHeatSheild();
+    }
+    else if ( p[2] == "DEPLOY_PARA" ){
+        deployParachute();
+    }
+    else if ( p[2] == "LOCK_PARA" ){
+        lockPrachute();
     }
 }
