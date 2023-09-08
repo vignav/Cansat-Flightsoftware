@@ -88,7 +88,7 @@ void setup() {
   actuatorSetup();
   RTCsetup();
 
-  //buzzerON();
+  buzzerON();
   greenON();
   redON();
   lockProbe();

@@ -5,8 +5,8 @@
 // onboard transistor : pin 5
 
 #define probePin 28
-#define probeDeployAngle 120
-#define probeLockAngle 50
+#define probeDeployAngle 180
+#define probeLockAngle 0
 
 #define parachutePin 29
 #define parachuteDeployAngle 90

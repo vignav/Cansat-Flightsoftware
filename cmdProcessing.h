@@ -157,13 +157,14 @@ void packetCheck(String packet)
     {
         if ( currentState == IDLE ){
             tilt_calibration = true;
+            CMD_ECHO = "CAL_TILT";
         }
     }
     else if ( p[2] == "RESET" ){
-          lockProbe();
-          lockPrachute();
-          stopDeployingHeatSheild();
-          stopRaisingFlag();
+        lockProbe();
+        lockPrachute();
+        stopDeployingHeatSheild();
+        stopRaisingFlag();
         currentState = IDLE ;
         currentMode = FLIGHT ;
         packet_count = 0;
@@ -171,21 +172,42 @@ void packetCheck(String packet)
         PC_deployed = false;
         MAST_raised = false;
         zero_alt_calib = 0;
-        
+
         WriteALL();
-        
+
         telemetry = true;
         tilt_calibration = false ;
         simulation_enabled = false;
+        CMD_ECHO = "RESET";
     }
     else if ( p[2] == "UNLOCK" ){
         if ( currentState == IDLE ){
             deployProbe();
+            CMD_ECHO = "UNLOCK";
         }
     }
     else if ( p[2] == "LOCK"){
         if ( currentState == IDLE ){
             lockProbe();
+            CMD_ECHO = "LOCK";
         }
+    }
+    else if ( p[2] == "BUZZER_OFF" ){
+        buzzerOFF();
+    }
+    else if ( p[2] == "BUZZER_ON" ){
+        buzzerON();
+    }
+    else if ( p[2] == "DEPLOY_LEGS" ){
+        deployHeatSheild();
+    }
+    else if ( p[2] == "STOP_DEPLOY_LEGS" ){
+        stopDeployingHeatSheild();
+    }
+    else if ( p[2] == "DEPLOY_PARA" ){
+        deployParachute();
+    }
+    else if ( p[2] == "LOCK_PARA" ){
+        lockPrachute();
     }
 }

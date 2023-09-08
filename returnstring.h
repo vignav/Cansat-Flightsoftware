@@ -25,7 +25,7 @@ String printFloat(double str, int len, int lenAfterDecimal, bool valid)
       str *= -1;
       len--;
     }
-    String s = String(str);
+    String s = String(str,len);
     int indexOfPt = s.indexOf(".");
     if((len)-(indexOfPt+1) >= lenAfterDecimal)
       finalStri = s.substring(0, (indexOfPt+1+lenAfterDecimal));
